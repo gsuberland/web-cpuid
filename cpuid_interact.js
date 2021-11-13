@@ -47,19 +47,13 @@ function handleSpanMouseHover(e)
 	}
 }
 
-function toggleBitRanges()
+function toggleButton(elementName)
 {
-	const diagramElements = document.querySelectorAll(".diagram_container");
-	let active = false;
-	for (const diagramElement of diagramElements)
-	{
-		diagramElement.cpuid_diagram.showBitRange = !diagramElement.cpuid_diagram.showBitRange;
-		if (diagramElement.cpuid_diagram.showBitRange)
-			active = true;
-		diagramElement.cpuid_diagram.clear();
-		diagramElement.cpuid_diagram.build();
-	}
-	const buttonElement = document.getElementById("button_toggleBitRanges");
+	const buttonElement = document.getElementById(elementName);
+	var active = buttonElement.getAttribute("data-active") ?? "false";
+	active = (active === "true");
+	active = !active;
+	buttonElement.setAttribute("data-active", active);
 	if (active)
 	{
 		buttonElement.classList.remove("button_inactive");
@@ -69,6 +63,31 @@ function toggleBitRanges()
 	{
 		buttonElement.classList.remove("button_active");
 		buttonElement.classList.add("button_inactive");
+	}
+	return active;
+}
+
+function toggleBitRanges()
+{
+	const active = toggleButton("button_toggleBitRanges");
+	
+	const diagramElements = document.querySelectorAll(".diagram_container");
+	for (const diagramElement of diagramElements)
+	{
+		diagramElement.cpuid_diagram.showBitRange = active;
+		diagramElement.cpuid_diagram.clear();
+		diagramElement.cpuid_diagram.build();
+	}
+}
+
+function toggleRegisterValues()
+{
+	const active = toggleButton("button_toggleRegisterValues");
+	
+	const registerValueElements = document.querySelectorAll(".register_value");
+	for (const registerValueElement of registerValueElements)
+	{
+		registerValueElement.style.display = active ? null : "none";
 	}
 }
 
@@ -122,6 +141,7 @@ function cpuid_build(cpuid_values)
 		var subleaf_container = document.createElement("div");
 		subleaf_container.classList.add("subleaf");
 		
+		let rn = 0;
 		for (const reg in leaf.registers)
 		{
 			var subleaf_reg_container = document.createElement("div");
@@ -129,6 +149,10 @@ function cpuid_build(cpuid_values)
 			
 			var subleaf_reg_heading = document.createElement("h2");
 			subleaf_reg_heading.innerText = "cpuid." + leaf.id.toString(16).padStart(2, '0') + ".0:" + reg;
+			var subleaf_reg_value = document.createElement("span");
+			subleaf_reg_value.innerText = " = " + leafValues.registers[rn].toString(16).toUpperCase().padStart(8, '0') + "h";
+			subleaf_reg_value.classList.add("register_value");
+			subleaf_reg_heading.appendChild(subleaf_reg_value);
 			subleaf_reg_container.appendChild(subleaf_reg_heading);
 			
 			var subleaf_reg_description = document.createElement("span");
@@ -142,6 +166,8 @@ function cpuid_build(cpuid_values)
 			subleaf_reg_container.appendChild(subleaf_reg_contents);
 			
 			subleaf_container.appendChild(subleaf_reg_container);
+			
+			rn++;
 		}
 		
 		leaf_container.appendChild(subleaf_container);

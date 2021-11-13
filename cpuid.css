@@ -7,6 +7,7 @@ the font file is not included in this repository since I do not have distributio
 body { background: #0b1416; color: #48d594; margin: 20px; font-size: 16px; }
 h1 { font-size: 220%; margin-bottom: 0.1em; }
 h2 { margin-bottom: 0; }
+a { color: #48d594; }
 #controls { border: 1px solid #48d594; padding: 10px; margin-top: 1em; display: inline-block; }
 #input_container { border: 1px solid #48d594; padding: 10px; margin-top: 1em; display: inline-block; }
 
