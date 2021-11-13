@@ -6,7 +6,7 @@ to get it back to about the same size, this scales the font size based on the as
 
 async function fix_font_size()
 {
-	const font = new FontFace('GT America Mono OCC', 'url(GTAmericaMono-Regular-OCC.woff2)');
+	const font = new FontFace('GT America Mono Regular', 'url(GT-America-Mono-Regular.woff2)');
 	try
 	{
 		await font.load();
@@ -27,7 +27,7 @@ async function fix_font_size()
 		const ctx = canvas.getContext('2d');
 		// get the font specifier applied to the body, minus the GT America Mono reference
 		const fontSize = document.body.computedStyleMap().get("font-size");
-		const fontFamily = document.body.computedStyleMap().get("font-family").toString().replace('"GT America Mono OCC"', '').replace(/^[ ,]*/g, '').replace(/[ ,]*$/g, '');
+		const fontFamily = document.body.computedStyleMap().get("font-family").toString().replace('"GT America Mono Regular"', '').replace(/^[ ,]*/g, '').replace(/[ ,]*$/g, '');
 		ctx.font = fontSize.toString() + ' ' + fontFamily.toString();
 		// measure a string that contains all the values we expect to see
 		const m = ctx.measureText('└─┬┘│",.^[]><()0123456789 the quick brown fox jumps over the lazy dog THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG');
