@@ -32,6 +32,18 @@ web-cpuid is in active development and is not yet complete. currently only Intel
 
 not all leaves are decoded but they are rapidly being implemented.
 
+## development
+
+the application is split into the following files:
+
+- `cpuid.html` - the html page that everything is loaded into
+- `cpuid.css` - the style for the page
+- `cpuid.js` - the core javascript that renders the diagrams
+- `cpuid_interact.js` - the code that interacts with the page to build the diagrams and respond to clicks
+- `cpuid_intel.js` - the CPUID leaf definitions for Intel processors
+- `fontfix.js` - a helper script that resizes the font to account for variances in monospace font sizes
+- `cpuid_startup.js` - initial boostrap code that runs when the page is loaded
+
 ## license
 
 web-cpuid is released under MIT license.
