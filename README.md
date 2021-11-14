@@ -1,6 +1,6 @@
 # web-cpuid
 
-web-cpuid is a lightweight web based decoder for CPUID information.
+web-cpuid is a lightweight web based decoder and visualiser for CPUID information.
 
 ![screenshot](screenshot.gif)
 
