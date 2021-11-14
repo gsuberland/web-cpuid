@@ -3,6 +3,7 @@ note: GT America Mono is a licensed typeface, available from https://www.grillit
 the font file is not included in this repository since I do not have distribution rights.
 */
 @font-face { font-family: 'GT America Mono Regular'; src: url(GT-America-Mono-Regular.woff2) format('woff2'); }
+
 * { font-family: "GT America Mono Regular", monospace; }
 body { background: #0b1416; color: #48d594; margin: 0px; overflow: auto; font-size: 16px; }
 h1 { font-size: 220%; margin-bottom: 0.1em; margin-top: 0; padding-top: 0; }
@@ -23,11 +24,16 @@ a { color: #48d594; }
 	--false-colour: var(--false-colour-standard);
 }
 
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
 .subleaf_reg { margin-bottom: 2em; }
 .leaf { margin-bottom: 4em; }
 .description { font-size: 11pt; }
 .diagram_container { margin-top: 0.5em; }
-.diagram_span { white-space: pre; }
+.diagram_span { white-space: pre; animation: fadein 0.25s; /* small fade-in to make it obvious when things reload */ }
 .bitfield { /* nothing as of yet */ }
 .bit_default { color: #48d594; }
 .bit_true { color: var(--true-colour); }
