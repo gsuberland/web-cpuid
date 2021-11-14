@@ -22,7 +22,7 @@ for targetFile in targetFiles:
     h.update(fhash.read())
     fhash.close()
     hash = b64encode(h.digest()).decode('utf-8')
-    print(hash)
+    print(targetFile + " = " + hash)
     contents = contents.replace(r'data-build-sri="' + targetFile + '"', 'integrity="sha256-' + hash + '"')
 
 if not exists("build/"):

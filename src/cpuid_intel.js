@@ -710,6 +710,35 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		new CpuidField("x2APIC ID of the current logical processor", [31,0], null, { printRawHex: true }),
 	];
 	
+	// cpuid.0c is is reserved
+	
+	// cpuid.0d.0.eax
+	#cpuid_0d_eax_fields = [
+		new CpuidField("Reserved", [31,10], null, { reserved: true }),
+		new CpuidField("PKRU state", 9, CpuidBaseResolvers.bool),
+		new CpuidField("IA32_XSS state", 8, CpuidBaseResolvers.bool),
+		new CpuidField("AVX-512 state", [7,5], null, { printRawHex: true }),
+		new CpuidField("MPX state", [4,3], null, { printRawHex: true }),
+		new CpuidField("AVX state", 2, CpuidBaseResolvers.bool),
+		new CpuidField("SSE state", 1, CpuidBaseResolvers.bool),
+		new CpuidField("x87 state", 0, CpuidBaseResolvers.bool),
+	];
+	
+	// cpuid.0d.0.ebx
+	#cpuid_0d_ebx_fields = [
+		new CpuidField("Maximum size required by enabled features in XCR0", [31,0], null, { printRawHex: true }),
+	];
+	
+	// cpuid.0d.0.ecx
+	#cpuid_0d_ecx_fields = [
+		new CpuidField("Maximum size required by all features supported by processor", [31,0], null, { printRawHex: true }),
+	];
+	
+	// cpuid.0d.0.edx
+	#cpuid_0d_edx_fields = [
+		new CpuidField("Supported bits of the upper 32 bits of XCR0", [31,0], null, { printRawHex: true }),
+	];
+	
 	#leaves = [
 		{
 			id: 0,
@@ -817,6 +846,24 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 				ebx: { description: "Extended topology enumeration", fields: this.#cpuid_0a_ebx_fields },
 				ecx: { description: "Extended topology enumeration", fields: this.#cpuid_reserved_field },
 				edx: { description: "Extended topology enumeration", fields: this.#cpuid_0a_edx_fields },
+			}
+		},
+		{
+			id: 0xC,
+			registers: {
+				eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+			}
+		},
+		{
+			id: 0xD,
+			registers: {
+				eax: { description: "Extended state enumeration", fields: this.#cpuid_0d_eax_fields },
+				ebx: { description: "Extended state enumeration", fields: this.#cpuid_0d_ebx_fields },
+				ecx: { description: "Extended state enumeration", fields: this.#cpuid_0d_ecx_fields },
+				edx: { description: "Extended state enumeration", fields: this.#cpuid_0d_edx_fields },
 			}
 		},
 	];
