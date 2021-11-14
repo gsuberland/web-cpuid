@@ -66,10 +66,16 @@ public delegate void CpuIDDelegate(uint level, uint subleaf, UInt32[] buffer);
 
 void Main()
 {
+	Console.WriteLine("cpuid_dump.linq - v1.0.1 - written by @gsuberland");
+	Console.WriteLine();
 	using (var proc = NtApiDotNet.NtProcess.OpenCurrent())
 	{
 		long addr = NtVirtualMemory.AllocateMemory(proc.Handle, 0, 4096, MemoryAllocationType.Reserve | MemoryAllocationType.Commit, MemoryAllocationProtect.ExecuteReadWrite);
-		Console.WriteLine("Allocated function at {0:x16}", addr);
+		if (addr == 0)
+		{
+			Console.WriteLine("Failed to allocate memory!");
+			return;
+		}
 
 		Marshal.Copy(proc.Is64Bit ? x64CodeBytes : x86CodeBytes, 0, new IntPtr(addr), proc.Is64Bit ? x64CodeBytes.Length : x86CodeBytes.Length);
 
