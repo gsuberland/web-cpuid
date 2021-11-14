@@ -222,7 +222,11 @@ async function fileUploadEvent(e)
 		console.log("warning: multiple files opened, ignoring extras.");
 	}
 	var xmlStr = await fileInput.files[0].text();
-	console.log(fileInput.files[0]);
+	if (!xmlStr.startsWith('<?xml version "1.0"?>'))
+	{
+		alert("Sorry, that doesn't look like a valid CPUID Explorer dump.");
+		return;
+	}
 	// cpuid explorer files are not well-formed XML. they have an invalid version tag, use namespaces without defining them, and have multiple root elements. fix them up!
 	xmlStr = xmlStr.replace('<?xml version "1.0"?>', '<?xml version="1.0"?><cpuid_data>').replaceAll('<CPUID:', '<').replaceAll('</CPUID:', '</') + "\n</cpuid_data>";
 	console.log(xmlStr);
@@ -230,7 +234,7 @@ async function fileUploadEvent(e)
 	const xml = parser.parseFromString(xmlStr, "text/xml");
 	console.log(xml);
 	
-	let cpuidString = "# CPUID Explorer file\n# Imported from " + fileInput.files[0].name + "\n";
+	let cpuidString = "# Imported " + fileInput.files[0].name + "\n# CPUID Explorer file\n";
 	
 	const cpuName = xml.getElementsByTagName("id")[0].getAttribute("name") ?? "(failed to read from input file)";
 	cpuidString += "# CPU: " + cpuName + "\n\n";
