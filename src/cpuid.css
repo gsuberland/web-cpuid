@@ -10,6 +10,8 @@ h2 { margin-bottom: 0; }
 a { color: #48d594; }
 #controls { border: 1px solid #48d594; padding: 10px; margin-top: 1em; display: inline-block; }
 #input_container { border: 1px solid #48d594; padding: 10px; margin-top: 1em; display: inline-block; }
+#input_container button { margin-right: 8px; }
+#file_input { display: none; }
 
 :root {
 	--true-colour: #49d695;

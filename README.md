@@ -16,6 +16,7 @@ current features include:
 - fields glow when the mouse hovers over them
 - alt-text for each cpuid leaf number shows a conversion to decimal
 - deuteranopia mode for improved visibility with red-green colourblindness
+- load cpuid files from [cpuid explorer](http://www.flounder.com/cpuid_explorer1.htm)
 
 ## usage
 
