@@ -11,6 +11,8 @@ fin = open("src/cpuid.html", mode="r", encoding="utf-8")
 contents = fin.read()
 fin.close()
 
+contents = contents.replace(r'data-build-crossorigin="true"', r'crossorigin="true"');
+
 targetFiles = re.findall(r'data-build-sri="([^"]+)"', contents)
 pprint(targetFiles)
 
