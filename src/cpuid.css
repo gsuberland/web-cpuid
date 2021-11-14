@@ -11,6 +11,7 @@ a { color: #48d594; }
 #controls { border: 1px solid #48d594; padding: 10px; margin-top: 1em; display: inline-block; }
 #input_container { border: 1px solid #48d594; padding: 10px; margin-top: 1em; display: inline-block; }
 #input_container button { margin-right: 8px; }
+#input_container button:active { color: #0b1416; background: #48d594; }
 #file_input { display: none; }
 
 :root {
@@ -38,7 +39,7 @@ button { background: #0b1416; color: #48d594; border: 1px solid #48d594; }
 .button_active { background: #48d594 !important; color: #0b1416 !important; }
 
 textarea { background: #1b2426; color: #48d594; border: 1px solid #48d594; margin-bottom: 5px; }
-#input_textarea { width: 500px; min-width: 450px; min-height: 150px; }
+#input_textarea { width: 600px; min-width: 450px; min-height: 150px; }
 ::-webkit-scrollbar { width: 15px; }
 ::-webkit-scrollbar-track { background: #2b3436; }
 ::-webkit-scrollbar-thumb { background: #38c584; }
