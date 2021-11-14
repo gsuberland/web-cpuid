@@ -27,7 +27,7 @@ cpuid values are loaded into the textarea at the top, in the following format:
 leaf.subleaf eax ebx ecx edx
 ```
 
-all values are to be given in hexadecimal.
+all values are to be given in hexadecimal. if you're on Windows you can use the included `cpuid_dump.linq` [linqpad](https://www.linqpad.net/) script to dump these values in the right format.
 
 you can toggle the display of leaf register values and field bit ranges with the buttons at the top of the page.
 
