@@ -326,6 +326,12 @@ class CpuidResolversIntel
 			"Core"
 		][v>>>0];
 	}
+	
+	static cpuid12_enclave_size(v, ctx=null)
+	{
+		// enclave size is 2^v
+		return (1 << (v>>>0)) >>> 0;
+	}
 }
 
 /*
@@ -773,6 +779,28 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 	
 	// todo: cpuid.10.1 and cpuid.10.2
 	
+	// cpuid.11 is reserved
+	
+	// cpuid.12.0.eax
+	#cpuid_12_eax_fields = [
+		new CpuidField("Reserved", [31,2], null, { reserved: true }),
+		new CpuidField("SGX2 leaf functions available", 1, CpuidBaseResolvers.bool),
+		new CpuidField("SGX1 leaf functions available", 0, CpuidBaseResolvers.bool),
+	];
+	
+	// cpuid.12.0.ebx
+	#cpuid_12_ebx_fields = [
+		new CpuidField("Supported extended SGX features (MISCSELECT)", [31,0], null, { printRawHex: true }),
+	];
+	
+	// cpuid.12.0.ecx is reserved
+	
+	// cpuid.12.0.edx
+	#cpuid_12_edx_fields = [
+		new CpuidField("Reserved", [31,16], null, { reserved: true }),
+		new CpuidField("Maximum supported enclave size in 64-bit mode", [15,8], CpuidResolversIntel.cpuid12_enclave_size, { printRawHex: true }),
+		new CpuidField("Maximum supported enclave size in non-64-bit mode", [7,0], CpuidResolversIntel.cpuid12_enclave_size, { printRawHex: true }),
+	];
 	
 	#leaves = [
 		{
@@ -926,6 +954,24 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 				ebx: { description: "Intel Resource Director Technology (RDT)", fields: this.#cpuid_10_ebx_fields },
 				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
 				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+			}
+		},
+		{
+			id: 0x11,
+			registers: {
+				eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+			}
+		},
+		{
+			id: 0x12,
+			registers: {
+				eax: { description: "SGX capability enumeration", fields: this.#cpuid_12_eax_fields },
+				ebx: { description: "SGX capability enumeration", fields: this.#cpuid_12_ebx_fields },
+				ecx: { description: "SGX capability enumeration", fields: this.#cpuid_reserved_field },
+				edx: { description: "SGX capability enumeration", fields: this.#cpuid_12_edx_fields },
 			}
 		},
 	];
