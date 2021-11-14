@@ -273,8 +273,19 @@ function loadValues()
 {
 	cpuid_clear();
 	const inputStr = document.getElementById('input_textarea').value;
-	const regex = /^(?<leaf>[0-9a-f]+)(?:[.](?<subleaf>[0-9a-f]+))?\s+(?<eax>[0-9a-f]+)\s+(?<ebx>[0-9a-f]+)\s+(?<ecx>[0-9a-f]+)\s+(?<edx>[0-9a-f]+)/img;
-	const matches = [...inputStr.matchAll(regex)];
+	const linuxCpuidRegex = /^\s*0x(?<leaf>[0-9a-f]+)\s+0x(?<subleaf>[0-9a-f]+):\s+eax=0x(?<eax>[0-9a-f]+)\s+ebx=0x(?<ebx>[0-9a-f]+)\s+ecx=0x(?<ecx>[0-9a-f]+)\s+edx=0x(?<edx>[0-9a-f]+)\s*$/img;
+	const standardRegex = /^\s*(?<leaf>[0-9a-f]+)(?:[.](?<subleaf>[0-9a-f]+))?\s+(?<eax>[0-9a-f]+)\s+(?<ebx>[0-9a-f]+)\s+(?<ecx>[0-9a-f]+)\s+(?<edx>[0-9a-f]+)/img;
+	let matches = null;
+	if (inputStr.match(linuxCpuidRegex) !== null)
+	{
+		// linux 'cpuid' tool output
+		matches = [...inputStr.matchAll(linuxCpuidRegex)];
+	}
+	else
+	{
+		// regular format
+		matches = [...inputStr.matchAll(standardRegex)];
+	}
 	let values = [];
 	for (const match of matches)
 	{

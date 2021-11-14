@@ -78,9 +78,9 @@ Base class for CPUID fields. This is overridden for each vendor.
 */
 class CpuidFieldsBase
 {
-	getLeafDefinition(leaf)
+	getLeaf(leaf)
 	{
-		throw new NotImplementedError("getLeafDefinition must be overridden in a deriving class");
+		throw new NotImplementedError("getLeaf must be overridden in a deriving class");
 	}
 }
 
