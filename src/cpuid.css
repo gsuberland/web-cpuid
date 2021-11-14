@@ -11,6 +11,14 @@ a { color: #48d594; }
 #controls { border: 1px solid #48d594; padding: 10px; margin-top: 1em; display: inline-block; }
 #input_container { border: 1px solid #48d594; padding: 10px; margin-top: 1em; display: inline-block; }
 
+:root {
+	--true-colour: #49d695;
+	
+	--false-colour-standard: #e86886;
+	--false-colour-deuteranopia: #db4325;
+	--false-colour: var(--false-colour-standard);
+}
+
 .subleaf_reg { margin-bottom: 2em; }
 .leaf { margin-bottom: 4em; }
 .description { font-size: 11pt; }
@@ -18,8 +26,8 @@ a { color: #48d594; }
 .diagram_span { white-space: pre; }
 .bitfield { /* nothing as of yet */ }
 .bit_default { color: #48d594; }
-.bit_true { color: #49d695; }
-.bit_false { color: #e86886; }
+.bit_true { color: var(--true-colour); }
+.bit_false { color: var(--false-colour); }
 .bit_reserved { color: #778077; }
 .diagram_hover { filter: brightness(150%) saturate(120%) drop-shadow(0px 0px 3px rgba(255,255,255,0.3)); }
 

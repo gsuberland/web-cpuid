@@ -91,6 +91,13 @@ function toggleRegisterValues()
 	}
 }
 
+function toggleDeuteranopiaMode()
+{
+	const active = toggleButton("button_toggleDeuteranopiaMode");
+	document.querySelector(':root').style.setProperty('--false-colour', active ? 'var(--false-colour-deuteranopia)' : 'var(--false-colour-standard)');
+}
+
+
 function loadValues()
 {
 	cpuid_clear();
