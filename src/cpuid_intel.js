@@ -332,6 +332,24 @@ class CpuidResolversIntel
 		// enclave size is 2^v
 		return (1 << (v>>>0)) >>> 0;
 	}
+	
+	static cpuid15_clock_ratio(v, ctx=null)
+	{
+		return "ratio: " + ctx.registers[1].toString(10) + "/" + ctx.registers[0].toString(10) + "=" + Number((ctx.registers[1] / ctx.registers[0]).toFixed(2));
+	}
+	
+	static cpuid16_frequency(v, ctx=null)
+	{
+		if ((v>>>0) < 1000)
+			return (v>>>0) + "MHz";
+		else
+		{
+			let fg = (v>>>0) / 1000;
+			if (Number.isInteger(fg))
+				return fg + ".0GHz";
+			return fg + "GHz";
+		}
+	}
 }
 
 /*
@@ -802,6 +820,80 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		new CpuidField("Maximum supported enclave size in non-64-bit mode", [7,0], CpuidResolversIntel.cpuid12_enclave_size, { printRawHex: true }),
 	];
 	
+	// cpuid.13 is reserved
+	
+	// cpuid.14.0.eax
+	#cpuid_14_eax_fields = [
+		new CpuidField("Maximum supported sub-leaf in leaf 14h", [31,0]),
+	];
+	
+	// cpuid.14.0.ebx
+	#cpuid_14_ebx_fields = [
+		new CpuidField("Reserved", [31,6], null, { reserved: true }),
+		new CpuidField("Power event trace supported", 5, CpuidBaseResolvers.bool),
+		new CpuidField("PTWRITE supported", 4, CpuidBaseResolvers.bool),
+		new CpuidField("MTC timing packet and suppression of COFI-based packets supported", 3, CpuidBaseResolvers.bool),
+		new CpuidField("IP and TraceStop filtering supported, and Intel PT MSRs preserved across warm reset", 2, CpuidBaseResolvers.bool),
+		new CpuidField("Configurable PSB and cycle-accurate mode supported", 1, CpuidBaseResolvers.bool),
+		new CpuidField("IA32_RTIT_CTL.CR3Filter can be set to 1, and IA32_RTIT_CR3_MATCH MSR can be accessed", 0, CpuidBaseResolvers.bool),
+	];
+	
+	// cpuid.14.0.ecx
+	#cpuid_14_ecx_fields = [
+		new CpuidField("Packets with IP payloads have LIP values", 31, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", [30,4], null, { reserved: true }),
+		new CpuidField("Output to Trace Transport subsystem supported", 3, CpuidBaseResolvers.bool),
+		new CpuidField("Single range output scheme supported", 2, CpuidBaseResolvers.bool),
+		new CpuidField("ToPA tables can hold any number of output entries", 1, CpuidBaseResolvers.bool),
+		new CpuidField("Tracing can be anbled with IA32_RTIT_CTL.ToPA=1", 0, CpuidBaseResolvers.bool),
+	];
+	
+	// cpuid.14.0.edx is reserved
+	
+	// cpuid.14.1.eax
+	/*#cpuid_14_eax_fields = [
+		new CpuidField("Bitmap of supported MTC period encodings", [31,16], null, { printRawHex: true }),
+		new CpuidField("Reserved", [15,3], null, { reserved: true }),
+		new CpuidField("Number of configurable address ranges for filtering", [2,0]),
+	];*/
+	
+	// cpuid.15.0.eax
+	#cpuid_15_eax_fields = [
+		new CpuidField("Denominator of the TSC / core crystal clock ratio", [31,0], CpuidResolversIntel.cpuid15_clock_ratio),
+	];
+	
+	// cpuid.15.0.ebx
+	#cpuid_15_ebx_fields = [
+		new CpuidField("Numerator of the TSC / core crystal clock ratio", [31,0], CpuidResolversIntel.cpuid15_clock_ratio),
+	];
+	
+	// cpuid.15.0.ecx
+	#cpuid_15_ecx_fields = [
+		new CpuidField("Nominal frequency of the TSC / core crystal clock ratio", [31,0]),
+	];
+	
+	// cpuid.15.0.edx is reserved
+	
+	// cpuid.16.0.eax
+	#cpuid_16_eax_fields = [
+		new CpuidField("Reserved", [31,16], null, { reserved: true }),
+		new CpuidField("Processor base frequency", [15,0], CpuidResolversIntel.cpuid16_frequency),
+	];
+	
+	// cpuid.16.0.ebx
+	#cpuid_16_ebx_fields = [
+		new CpuidField("Reserved", [31,16], null, { reserved: true }),
+		new CpuidField("Maximum frequency", [15,0], CpuidResolversIntel.cpuid16_frequency),
+	];
+	
+	// cpuid.16.0.ecx
+	#cpuid_16_ecx_fields = [
+		new CpuidField("Reserved", [31,16], null, { reserved: true }),
+		new CpuidField("Bus reference frequency", [15,0], CpuidResolversIntel.cpuid16_frequency),
+	];
+	
+	// cpuid.16.0.edx is reserved
+	
 	#leaves = [
 		{
 			id: 0,
@@ -972,6 +1064,42 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 				ebx: { description: "SGX capability enumeration", fields: this.#cpuid_12_ebx_fields },
 				ecx: { description: "SGX capability enumeration", fields: this.#cpuid_reserved_field },
 				edx: { description: "SGX capability enumeration", fields: this.#cpuid_12_edx_fields },
+			}
+		},
+		{
+			id: 0x13,
+			registers: {
+				eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+			}
+		},
+		{
+			id: 0x14,
+			registers: {
+				eax: { description: "Intel processor trace enumeration", fields: this.#cpuid_14_eax_fields },
+				ebx: { description: "Intel processor trace enumeration", fields: this.#cpuid_14_ebx_fields },
+				ecx: { description: "Intel processor trace enumeration", fields: this.#cpuid_14_ecx_fields },
+				edx: { description: "Intel processor trace enumeration", fields: this.#cpuid_reserved_field },
+			}
+		},
+		{
+			id: 0x15,
+			registers: {
+				eax: { description: "Time stamp counter and nominal core crystal clock", fields: this.#cpuid_15_eax_fields },
+				ebx: { description: "Time stamp counter and nominal core crystal clock", fields: this.#cpuid_15_ebx_fields },
+				ecx: { description: "Time stamp counter and nominal core crystal clock", fields: this.#cpuid_15_ecx_fields },
+				edx: { description: "Time stamp counter and nominal core crystal clock", fields: this.#cpuid_reserved_field },
+			}
+		},
+		{
+			id: 0x16,
+			registers: {
+				eax: { description: "Processor frequency information", fields: this.#cpuid_16_eax_fields },
+				ebx: { description: "Processor frequency information", fields: this.#cpuid_16_ebx_fields },
+				ecx: { description: "Processor frequency information", fields: this.#cpuid_16_ecx_fields },
+				edx: { description: "Processor frequency information", fields: this.#cpuid_reserved_field },
 			}
 		},
 	];
