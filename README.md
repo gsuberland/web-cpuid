@@ -127,7 +127,7 @@ this project has a policy of disallowing inline javascript within the html, so t
 
 ## code of conduct
 
-please note that this project is released with a contributor code of conduct. by participating in this project, you agree to abide by its terms. the code of conduct can be found [here](https://github.com/simplybusiness/Kiln/blob/main/CODE_OF_CONDUCT.md).
+please note that this project is released with a contributor code of conduct. by participating in this project, you agree to abide by its terms. the code of conduct can be found [here](CODE_OF_CONDUCT.md).
 
 ## license
 
