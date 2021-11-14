@@ -757,6 +757,23 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		new CpuidField("Reserved", 0, null, { reserved: true }),
 	];
 	
+	// todo: cpuid.0f.1 sub-leaf
+	
+	// cpuid.10.0.eax is reserved
+	
+	#cpuid_10_ebx_fields = [
+		new CpuidField("Reserved", [31,3], null, { reserved: true }),
+		new CpuidField("Supports L3 cache allocation technology", 2, CpuidBaseResolvers.bool),
+		new CpuidField("Supports L2 cache allocation technology", 1, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", 0, null, { reserved: true }),
+	];
+	
+	// cpuid.10.0.ecx is reserved
+	// cpuid.10.0.edx is reserved
+	
+	// todo: cpuid.10.1 and cpuid.10.2
+	
+	
 	#leaves = [
 		{
 			id: 0,
@@ -900,6 +917,15 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 				ebx: { description: "Extended state enumeration", fields: this.#cpuid_0f_ebx_fields },
 				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
 				edx: { description: "Extended state enumeration", fields: this.#cpuid_0f_edx_fields },
+			}
+		},
+		{
+			id: 0x10,
+			registers: {
+				eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				ebx: { description: "Intel Resource Director Technology (RDT)", fields: this.#cpuid_10_ebx_fields },
+				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
 			}
 		},
 	];
