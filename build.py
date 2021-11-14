@@ -2,8 +2,8 @@ import io
 import re
 import hashlib
 from base64 import b64encode
-from os import listdir
-from os.path import join, isfile
+from os import listdir, makedirs
+from os.path import join, isfile, exists
 from shutil import copyfile
 from pprint import pprint
 
@@ -23,9 +23,13 @@ for targetFile in targetFiles:
     print(hash)
     contents = contents.replace(r'data-build-sri="' + targetFile + '"', 'integrity="sha256-' + hash + '"')
 
+if not exists("build/"):
+    makedirs("build/")
+
 fout = open("build/index.html", mode="w", encoding="utf-8")
 fout.write(contents)
 fout.close()
+
 
 files = [f for f in listdir("src/") if (isfile(join("src/", f)) and not f == "cpuid.html")]
 for file in files:
