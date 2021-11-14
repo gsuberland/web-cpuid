@@ -144,11 +144,36 @@ function cpuid_build(cpuid_values)
 		let rn = 0;
 		for (const reg in leaf.registers)
 		{
+			// todo: support sub-leaves
+			const subleaf = 0;
+			
 			var subleaf_reg_container = document.createElement("div");
 			subleaf_reg_container.classList.add("subleaf_reg");
 			
 			var subleaf_reg_heading = document.createElement("h2");
-			subleaf_reg_heading.innerText = "cpuid." + leaf.id.toString(16).padStart(2, '0') + ".0:" + reg;
+			subleaf_reg_heading.innerText = "cpuid.";
+			
+			var subleaf_reg_number = document.createElement("span");
+			subleaf_reg_number.innerText = leaf.id.toString(16).padStart(2, '0');
+			subleaf_reg_number.title = leaf.id.toString(16).padStart(2, '0') + "h = " + leaf.id.toString(10);
+			subleaf_reg_heading.appendChild(subleaf_reg_number);
+			
+			var subleaf_reg_separator = document.createElement("span");
+			subleaf_reg_separator.innerText = '.';
+			subleaf_reg_heading.appendChild(subleaf_reg_separator);
+			
+			var subleaf_reg_subleafnumber = document.createElement("span");
+			subleaf_reg_subleafnumber.innerText = subleaf.toString(16);
+			subleaf_reg_heading.appendChild(subleaf_reg_subleafnumber);
+			
+			var subleaf_reg_colon = document.createElement("span");
+			subleaf_reg_colon.innerText = ':';
+			subleaf_reg_heading.appendChild(subleaf_reg_colon);
+			
+			var subleaf_reg_regname = document.createElement("span");
+			subleaf_reg_regname.innerText = reg;
+			subleaf_reg_heading.appendChild(subleaf_reg_regname);
+			
 			var subleaf_reg_value = document.createElement("span");
 			subleaf_reg_value.innerText = " = " + leafValues.registers[rn].toString(16).toUpperCase().padStart(8, '0') + "h";
 			subleaf_reg_value.classList.add("register_value");
