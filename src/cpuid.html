@@ -1,9 +1,9 @@
 <html>
 	<head>
 		<meta charset="UTF-8" />
-		<link rel="preload" href="GT-America-Mono-Regular.woff2" as="font" type="font/woff2">
+		<link rel="preload" href="GT-America-Mono-Regular.woff2" as="font" type="font/woff2" crossorigin="true">
 		<title>CPUID</title>
-		<link rel="stylesheet" href="cpuid.css" />
+		<link rel="stylesheet" href="cpuid.css" data-build-sri="cpuid.css" />
 	</head>
 <body>
 	<div id="main">
@@ -106,11 +106,10 @@ leaf     sub   eax       ebx       ecx       edx
 	</div>
 </div>
 
-<script type="text/javascript" src="cpuid_interact.js"></script>
-<script type="text/javascript" src="cpuid.js"></script>
-<script type="text/javascript" src="cpuid_intel.js"></script>
-<script type="text/javascript" src="fontfix.js"></script>
-<script type="text/javascript">loadValues();</script>
-<script type="text/javascript">fix_font_size();</script>
+<script type="text/javascript" src="cpuid_interact.js" data-build-sri="cpuid_interact.js"></script>
+<script type="text/javascript" src="cpuid.js" data-build-sri="cpuid.js"></script>
+<script type="text/javascript" src="cpuid_intel.js" data-build-sri="cpuid_intel.js"></script>
+<script type="text/javascript" src="fontfix.js" data-build-sri="fontfix.js"></script>
+<script type="text/javascript" src="cpuid_startup.js" data-build-sri="cpuid_startup.js"></script>
 </body>
 </html>
