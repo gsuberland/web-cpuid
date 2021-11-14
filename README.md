@@ -125,8 +125,12 @@ by convention, register field arrays are defined as a private class property nam
 
 this project has a policy of disallowing inline javascript within the html, so that it can comply with a content security policy that forbids inline scripts. as such, one cannot simply make a button with an inline event handler like `<button onclick="foo()">`. instead, these event handlers are assigned in `cpuid_startup.js`.
 
+## code of conduct
+
+please note that this project is released with a contributor code of conduct. by participating in this project, you agree to abide by its terms. the code of conduct can be found [here](https://github.com/simplybusiness/Kiln/blob/main/CODE_OF_CONDUCT.md).
+
 ## license
 
-web-cpuid is released under MIT license.
+web-cpuid is released under [MIT license](LICENSE).
 
 the font used on the hosted version is [GT America Mono](https://www.grillitype.com/typeface/gt-america), a commercial font. I paid for a license to use it on my website. the font is not included in this repository as I do not have the rights to distribute it.
