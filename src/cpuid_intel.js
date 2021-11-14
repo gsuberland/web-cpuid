@@ -739,6 +739,24 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		new CpuidField("Supported bits of the upper 32 bits of XCR0", [31,0], null, { printRawHex: true }),
 	];
 	
+	// todo: cpuid.0d.x subleaves
+	
+	// cpuid.0e is reserved
+	
+	// cpuid.0f.0.eax is reserved
+	
+	#cpuid_0f_ebx_fields = [
+		new CpuidField("Maximum range of RMID within this physical processor of all types", [31,0], null, { printRawHex: true }),
+	];
+	
+	// cpuid.0f.0.ecx is reserved
+	
+	#cpuid_0f_edx_fields = [
+		new CpuidField("Reserved", [31,2], null, { reserved: true }),
+		new CpuidField("Supports L3 cache RDT monitoring", 1, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", 0, null, { reserved: true }),
+	];
+	
 	#leaves = [
 		{
 			id: 0,
@@ -864,6 +882,24 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 				ebx: { description: "Extended state enumeration", fields: this.#cpuid_0d_ebx_fields },
 				ecx: { description: "Extended state enumeration", fields: this.#cpuid_0d_ecx_fields },
 				edx: { description: "Extended state enumeration", fields: this.#cpuid_0d_edx_fields },
+			}
+		},
+		{
+			id: 0xE,
+			registers: {
+				eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+			}
+		},
+		{
+			id: 0xF,
+			registers: {
+				eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				ebx: { description: "Extended state enumeration", fields: this.#cpuid_0f_ebx_fields },
+				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				edx: { description: "Extended state enumeration", fields: this.#cpuid_0f_edx_fields },
 			}
 		},
 	];
