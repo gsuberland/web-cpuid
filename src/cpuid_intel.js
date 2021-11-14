@@ -662,7 +662,7 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		new CpuidField("Length of EBX bit vector to enumerate architectural performance monitoring events", [31,24], { printRawHex: true }),
 		new CpuidField("Bit width of general-purpose performance monitoring counter", [23,16], { printRawHex: true }),
 		new CpuidField("Number of general-purpose performance monitoring counters per logical processor", [15,8], { printRawHex: true }),
-		new CpuidField("Version ID of architectureal performance monitoring MSR value", [7,0], { printRawHex: true }),
+		new CpuidField("Version ID of architectural performance monitoring MSR value", [7,0], { printRawHex: true }),
 	];
 	
 	// cpuid.0a.0.ebx
