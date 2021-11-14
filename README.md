@@ -6,6 +6,17 @@ web-cpuid is a lightweight web based decoder for CPUID information.
 
 you can find a hosted version of it [here](https://cpuid.apps.poly.nomial.co.uk/).
 
+## features
+
+current features include:
+
+- shows both raw and decoded values for fields
+- optionally shows the bit range of each field inline
+- optionally shows the value of each register inline
+- fields glow when the mouse hovers over them
+- alt-text for each cpuid leaf number shows a conversion to decimal
+- deuteranopia mode for improved visibility with red-green colourblindness
+
 ## usage
 
 either use the hosted version or open `src/cpuid.html` in a browser locally.
@@ -30,7 +41,15 @@ the `build.py` script generates SHA256 SRI tags for the referenced scripts and s
 
 web-cpuid is in active development and is not yet complete. currently only Intel leaves are supported, but the framework is in place to be able to support AMD, VIA, etc.
 
-not all leaves are decoded but they are rapidly being implemented.
+current task list:
+
+- [ ] decode all intel cpuid fields in the basic 0x00000000 to 0x0fffffff range
+- [ ] decode all intel cpuid fields in the extended 0x80000000 to 0x8fffffff range
+- [ ] add support for auto-detection of vendor
+- [ ] decode all AMD cpuid fileds in the basic 0x00000000 to 0x0fffffff range
+- [ ] decode all AMD cpuid fields in the extended 0x80000000 to 0x8fffffff range
+- [ ] add sub-leaf support
+- [ ] add support for contextually decoding hypervisor leaves in the 0x40000000 to 0x4fffffff range
 
 ## development
 
