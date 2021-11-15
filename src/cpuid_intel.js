@@ -1063,6 +1063,15 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 	
 	// cpuid.80000006.0.edx is reserved
 	
+	// cpuid.80000007.0.eax, cpuid.80000007.0.ebx, cpuid.80000007.0.ecx are reserved
+	
+	//cpuid.80000007.0.edx
+	#cpuid_80000007_edx_fields = [
+		new CpuidField("Reserved", [31,9], null, { reserved: true }),
+		new CpuidField("Invariant TSC available", 8, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", [7,0], null, { reserved: true }),
+	];
+	
 	#leaves = [
 		{
 			id: 0,
@@ -1337,10 +1346,19 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		{
 			id: 0x80000006,
 			registers: {
-				eax: { description: "Processor brand string", fields: this.#cpuid_reserved_field },
-				ebx: { description: "Processor brand string", fields: this.#cpuid_reserved_field },
-				ecx: { description: "Processor brand string", fields: this.#cpuid_80000006_ecx_fields },
-				edx: { description: "Processor brand string", fields: this.#cpuid_reserved_field },
+				eax: { description: "L2 cache information", fields: this.#cpuid_reserved_field },
+				ebx: { description: "L2 cache information", fields: this.#cpuid_reserved_field },
+				ecx: { description: "L2 cache information", fields: this.#cpuid_80000006_ecx_fields },
+				edx: { description: "L2 cache information", fields: this.#cpuid_reserved_field },
+			}
+		},
+		{
+			id: 0x80000007,
+			registers: {
+				eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				edx: { description: "Invariant TSC", fields: this.#cpuid_80000007_edx_fields },
 			}
 		},
 	];
