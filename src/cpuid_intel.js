@@ -1072,6 +1072,17 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		new CpuidField("Reserved", [7,0], null, { reserved: true }),
 	];
 	
+	// cpuid.80000008.0.eax
+	#cpuid_80000008_eax_fields = [
+		new CpuidField("Reserved", [31,16], null, { reserved: true }),
+		new CpuidField("Number of linear address bits", [15,8]),
+		new CpuidField("Number of physical address bits", [7,0]),
+	];
+	
+	// cpuid.80000008.0.ebx, cpuid.80000008.0.ecx, cpuid.80000008.0.edx are reserved
+	
+	// end of the 80000000-8fffffff range
+	
 	#leaves = [
 		{
 			id: 0,
@@ -1359,6 +1370,15 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
 				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
 				edx: { description: "Invariant TSC", fields: this.#cpuid_80000007_edx_fields },
+			}
+		},
+		{
+			id: 0x80000008,
+			registers: {
+				eax: { description: "Reserved", fields: this.#cpuid_80000008_eax_fields },
+				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
 			}
 		},
 	];
