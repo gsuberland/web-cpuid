@@ -962,7 +962,6 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		new CpuidField("Reserved", [10,0], null, { reserved: true }),
 	];
 	
-	
 	#leaves = [
 		{
 			id: 0,
@@ -1192,10 +1191,10 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		{
 			id: 0x80000001,
 			registers: {
-				eax: { description: "Extended function CPUID information", fields: this.#cpuid_80000001_eax_fields },
-				ebx: { description: "Extended function CPUID information", fields: this.#cpuid_reserved_field },
-				ecx: { description: "Extended function CPUID information", fields: this.#cpuid_80000001_ecx_fields },
-				edx: { description: "Extended function CPUID information", fields: this.#cpuid_80000001_edx_fields },
+				eax: { description: "Extended processor signature and feature bits", fields: this.#cpuid_80000001_eax_fields },
+				ebx: { description: "Extended processor signature and feature bits", fields: this.#cpuid_reserved_field },
+				ecx: { description: "Extended processor signature and feature bits", fields: this.#cpuid_80000001_ecx_fields },
+				edx: { description: "Extended processor signature and feature bits", fields: this.#cpuid_80000001_edx_fields },
 			}
 		},
 	];
