@@ -1375,7 +1375,7 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		{
 			id: 0x80000008,
 			registers: {
-				eax: { description: "Reserved", fields: this.#cpuid_80000008_eax_fields },
+				eax: { description: "Linear/physical address size", fields: this.#cpuid_80000008_eax_fields },
 				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
 				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
 				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
