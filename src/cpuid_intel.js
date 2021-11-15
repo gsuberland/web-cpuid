@@ -733,7 +733,38 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		new CpuidField("PREFETCHWT1", 0, CpuidBaseResolvers.bool),
 	];
 	
-	// cpuid.7.0:edx is reserved
+	// cpuid.7.0:edx
+	#cpuid_07_edx_fields = [
+		new CpuidField("Speculative store bypass disable (SSBD)", 31, CpuidBaseResolvers.bool),
+		new CpuidField("IA32_CORE_CAPABILITIES MSR available", 30, CpuidBaseResolvers.bool),
+		new CpuidField("IA32_ARCH_CAPABILITIES MSR available", 29, CpuidBaseResolvers.bool),
+		new CpuidField("L1 data cache (L1D) flush", 28, CpuidBaseResolvers.bool),
+		new CpuidField("Single thread indirect branch predictors (STIBP)", 27, CpuidBaseResolvers.bool),
+		new CpuidField("Speculation control (IBRS and IPBP)", 26, CpuidBaseResolvers.bool),
+		new CpuidField("Tile computation on 8-bit integers (AMX-INT8)", 25, CpuidBaseResolvers.bool),
+		new CpuidField("Tile architecture (AMX-TILE)", 24, CpuidBaseResolvers.bool),
+		new CpuidField("AVX512 FP16", 23, CpuidBaseResolvers.bool),
+		new CpuidField("Tile computation on bfloat16 (AMX-BF16)", 22, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", 21, null, { reserved: true }),
+		new CpuidField("CET indirect branch tracking (CET IBT)", 20, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", 19, null, { reserved: true }),
+		new CpuidField("Platform configuration instruction (PCONFIG)", 18, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", 17, null, { reserved: true }),
+		new CpuidField("TSX suspend load address tracking", 16, CpuidBaseResolvers.bool),
+		new CpuidField("Hybrid architecture", 15, CpuidBaseResolvers.bool),
+		new CpuidField("SERIALIZE instruction", 14, CpuidBaseResolvers.bool),
+		new CpuidField("TSX force abort MSR available", 13, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", [12,11], null, { reserved: true }),
+		new CpuidField("Microarchitectural data sampling mitigation (MD_CLEAR)", 10, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", 9, null, { reserved: true }),
+		new CpuidField("AVX512 VP2INTERSECT dword/qword intersection instructions", 8 , CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", [7,6], null, { reserved: true }),
+		new CpuidField("User interrupts (UINTR)", 5 , CpuidBaseResolvers.bool),
+		new CpuidField("Fast short REP MOV", 4 , CpuidBaseResolvers.bool),
+		new CpuidField("AVX512 4FMAPS 4-iteration fused multiply-add", 3 , CpuidBaseResolvers.bool),
+		new CpuidField("AVX512 4VNNIW 4-iteration dot product with accumulation", 2 , CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", [1,0], null, { reserved: true }),
+	];
 	
 	// cpuid.8.0 is reserved
 	
@@ -1186,7 +1217,7 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 				eax: { description: "Maximum sub-leaves for leaf 7", fields: this.#cpuid_07_eax_fields },
 				ebx: { description: "Structured extended feature flags", fields: this.#cpuid_07_ebx_fields },
 				ecx: { description: "Structured extended feature flags", fields: this.#cpuid_07_ecx_fields },
-				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				edx: { description: "Structured extended feature flags", fields: this.#cpuid_07_edx_fields },
 			}
 		},
 		{
