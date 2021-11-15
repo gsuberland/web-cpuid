@@ -962,6 +962,70 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		new CpuidField("Reserved", [10,0], null, { reserved: true }),
 	];
 	
+	// todo: when multi-leaf context is implemented, have this print a full string
+	// I could have put in a per-leaf string concat resolver here, but that wouldn't help much and it'd look ugly.
+	
+	// cpuid.80000002.0.eax
+	#cpuid_80000002_eax_fields = [
+		new CpuidField("Processor brand string 0", [31,0], CpuidBaseResolvers.ascii),
+	];
+	
+	// cpuid.80000002.0.ebx
+	#cpuid_80000002_ebx_fields = [
+		new CpuidField("Processor brand string 1", [31,0], CpuidBaseResolvers.ascii),
+	];
+	
+	// cpuid.80000002.0.ecx
+	#cpuid_80000002_ecx_fields = [
+		new CpuidField("Processor brand string 2", [31,0], CpuidBaseResolvers.ascii),
+	];
+	
+	// cpuid.80000002.0.edx
+	#cpuid_80000002_edx_fields = [
+		new CpuidField("Processor brand string 3", [31,0], CpuidBaseResolvers.ascii),
+	];
+	
+	// cpuid.80000003.0.eax
+	#cpuid_80000003_eax_fields = [
+		new CpuidField("Processor brand string 4", [31,0], CpuidBaseResolvers.ascii),
+	];
+	
+	// cpuid.80000003.0.ebx
+	#cpuid_80000003_ebx_fields = [
+		new CpuidField("Processor brand string 5", [31,0], CpuidBaseResolvers.ascii),
+	];
+	
+	// cpuid.80000003.0.ecx
+	#cpuid_80000003_ecx_fields = [
+		new CpuidField("Processor brand string 6", [31,0], CpuidBaseResolvers.ascii),
+	];
+	
+	// cpuid.80000003.0.edx
+	#cpuid_80000003_edx_fields = [
+		new CpuidField("Processor brand string 7", [31,0], CpuidBaseResolvers.ascii),
+	];
+	
+	// cpuid.80000004.0.eax
+	#cpuid_80000004_eax_fields = [
+		new CpuidField("Processor brand string 8", [31,0], CpuidBaseResolvers.ascii),
+	];
+	
+	// cpuid.80000004.0.ebx
+	#cpuid_80000004_ebx_fields = [
+		new CpuidField("Processor brand string 9", [31,0], CpuidBaseResolvers.ascii),
+	];
+	
+	// cpuid.80000004.0.ecx
+	#cpuid_80000004_ecx_fields = [
+		new CpuidField("Processor brand string 10", [31,0], CpuidBaseResolvers.ascii),
+	];
+	
+	// cpuid.80000004.0.edx
+	#cpuid_80000004_edx_fields = [
+		new CpuidField("Processor brand string 11", [31,0], CpuidBaseResolvers.ascii),
+	];
+	
+	
 	#leaves = [
 		{
 			id: 0,
@@ -1195,6 +1259,33 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 				ebx: { description: "Extended processor signature and feature bits", fields: this.#cpuid_reserved_field },
 				ecx: { description: "Extended processor signature and feature bits", fields: this.#cpuid_80000001_ecx_fields },
 				edx: { description: "Extended processor signature and feature bits", fields: this.#cpuid_80000001_edx_fields },
+			}
+		},
+		{
+			id: 0x80000002,
+			registers: {
+				eax: { description: "Processor brand string", fields: this.#cpuid_80000002_eax_fields },
+				ebx: { description: "Processor brand string", fields: this.#cpuid_80000002_ebx_fields },
+				ecx: { description: "Processor brand string", fields: this.#cpuid_80000002_ecx_fields },
+				edx: { description: "Processor brand string", fields: this.#cpuid_80000002_edx_fields },
+			}
+		},
+		{
+			id: 0x80000003,
+			registers: {
+				eax: { description: "Processor brand string", fields: this.#cpuid_80000003_eax_fields },
+				ebx: { description: "Processor brand string", fields: this.#cpuid_80000003_ebx_fields },
+				ecx: { description: "Processor brand string", fields: this.#cpuid_80000003_ecx_fields },
+				edx: { description: "Processor brand string", fields: this.#cpuid_80000003_edx_fields },
+			}
+		},
+		{
+			id: 0x80000004,
+			registers: {
+				eax: { description: "Processor brand string", fields: this.#cpuid_80000004_eax_fields },
+				ebx: { description: "Processor brand string", fields: this.#cpuid_80000004_ebx_fields },
+				ecx: { description: "Processor brand string", fields: this.#cpuid_80000004_ecx_fields },
+				edx: { description: "Processor brand string", fields: this.#cpuid_80000004_edx_fields },
 			}
 		},
 	];
