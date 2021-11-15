@@ -434,7 +434,7 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 
 	// cpuid.1.0:ecx
 	#cpuid_01_ecx_fields = [
-		new CpuidField("Reserved", 31, null, { reserved: true }),
+		new CpuidField("Hypervisor (not set by hardware)", 31, CpuidBaseResolvers.bool), // this is not a CPUID bit specific to Intel, but it is set to true by some hypervisors.
 		new CpuidField("RDRAND", 30, CpuidBaseResolvers.bool),
 		new CpuidField("16-bit FP conversion", 29, CpuidBaseResolvers.bool),
 		new CpuidField("AVX", 28, CpuidBaseResolvers.bool),
@@ -473,7 +473,7 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		new CpuidField("Pending break enable", 31, CpuidBaseResolvers.bool),
 		new CpuidField("Reserved", 30, null, { reserved: true }),
 		new CpuidField("Thermal monitor", 29, CpuidBaseResolvers.bool),
-		new CpuidField("HyperThreading", 28, CpuidBaseResolvers.bool),
+		new CpuidField("HyperThreading / max APIC IDs field is valid", 28, CpuidBaseResolvers.bool),
 		new CpuidField("Self snoop", 27, CpuidBaseResolvers.bool),
 		new CpuidField("SSE2", 26, CpuidBaseResolvers.bool),
 		new CpuidField("SSE", 25, CpuidBaseResolvers.bool),
@@ -614,16 +614,27 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		new CpuidField("Number of C0 sub C-states supported using MWAIT", [3,0]),
 	];
 	
-	// cpuid.6.0:eax
+	// cpuid.6.0:eax - some fields not documented in CPUID instruction docs.
+	// see reference https://github.com/tycho/cpuid/blob/829e90ce44b84fda3cd4e1421cf76e98f5eb876b/feature.c#L136
 	#cpuid_06_eax_fields = [
-		new CpuidField("Reserved", [31,14], null, { reserved: true }),
+		new CpuidField("IP payloads are LIP", 31, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", [30,22], null, { reserved: true }),
+		new CpuidField("Enhanced hardware feedback MSRs", 23, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", [22,21], null, { reserved: true }),
+		new CpuidField("Ignoring idle logical processor HWP request", 20, CpuidBaseResolvers.bool),
+		new CpuidField("Hardware feedback MSRs", 19, CpuidBaseResolvers.bool),
+		new CpuidField("Fast access mode for IA32_HWP_REQUEST MSR", 18, CpuidBaseResolvers.bool),
+		new CpuidField("Flexible HWP", 17, CpuidBaseResolvers.bool),
+		new CpuidField("HWP PECI override", 16, CpuidBaseResolvers.bool),
+		new CpuidField("HWP highest performance charge", 15, CpuidBaseResolvers.bool),
+		new CpuidField("Intel Turbo Boost Max Technology 3.0", 14, CpuidBaseResolvers.bool),
 		new CpuidField("Hardware duty cycling (HDC)", 13, CpuidBaseResolvers.bool),
 		new CpuidField("Reserved", 12, null, { reserved: true }),
 		new CpuidField("HWP package level request", 11, CpuidBaseResolvers.bool),
 		new CpuidField("HWP energy performance preference", 10, CpuidBaseResolvers.bool),
 		new CpuidField("HWP activity window", 9, CpuidBaseResolvers.bool),
 		new CpuidField("HWP notification", 8, CpuidBaseResolvers.bool),
-		new CpuidField("HWP", 7, CpuidBaseResolvers.bool),
+		new CpuidField("Hardware managed P-state base support (HWP)", 7, CpuidBaseResolvers.bool),
 		new CpuidField("Package thermal management (PTM)", 6, CpuidBaseResolvers.bool),
 		new CpuidField("Clock modulation duty cycle extension (EMCD)", 5, CpuidBaseResolvers.bool),
 		new CpuidField("Power limit notification (PLN)", 4, CpuidBaseResolvers.bool),
