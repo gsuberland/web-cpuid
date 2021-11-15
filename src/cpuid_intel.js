@@ -1144,7 +1144,14 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		new CpuidField("Number of physical address bits", [7,0]),
 	];
 	
-	// cpuid.80000008.0.ebx, cpuid.80000008.0.ecx, cpuid.80000008.0.edx are reserved
+	// cpuid.80000008.0.ebx
+	#cpuid_80000008_ebx_fields = [
+		new CpuidField("Reserved", [31,10], null, { reserved: true }),
+		new CpuidField("Write back modified cache lines back and do not invalidate cache (WBNOINVD)", 8, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", [8,0], null, { reserved: true }),
+	];
+	
+	// cpuid.80000008.0.ecx, cpuid.80000008.0.edx are reserved
 	
 	// end of the 80000000-8fffffff range
 	
