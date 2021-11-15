@@ -931,6 +931,38 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 	
 	// cpuid.80000000.0.ebx, cpuid.80000000.0.ecx, cpuid.80000000.0.edx are reserved
 	
+	// cpuid.80000001.0.eax
+	#cpuid_80000001_eax_fields = [
+		new CpuidField("Extended processor signature and feature bits", [31,0], null, { printRawHex: true }),
+	];
+	
+	// cpuid.80000001.0.ebx is reserved
+	
+	// cpuid.80000001.0.ecx
+	#cpuid_80000001_ecx_fields = [
+		new CpuidField("Reserved", [31,9], null, { reserved: true }),
+		new CpuidField("PREFETCHW", 8, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", [7,6], null, { reserved: true }),
+		new CpuidField("LZCNT", 5, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", [4,1], null, { reserved: true }),
+		new CpuidField("LAHF/SAHF available in 64-bit mode", 0, CpuidBaseResolvers.bool),
+	];
+	
+	// cpuid.80000001.0.edx
+	#cpuid_80000001_edx_fields = [
+		new CpuidField("Reserved", [31,30], null, { reserved: true }),
+		new CpuidField("Intel 64 architecture available", 29, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", 28, null, { reserved: true }),
+		new CpuidField("RDTSCP and IA32_TSC_AUX available", 27, CpuidBaseResolvers.bool),
+		new CpuidField("1GB pages available", 26, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", [25,21], null, { reserved: true }),
+		new CpuidField("Execute disable bit (NX) available", 20, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", [19,12], null, { reserved: true }),
+		new CpuidField("SYSCALL/SYSRET available in 64-bit mode", 11, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", [10,0], null, { reserved: true }),
+	];
+	
+	
 	#leaves = [
 		{
 			id: 0,
@@ -1155,6 +1187,15 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 				ebx: { description: "Extended function CPUID information", fields: this.#cpuid_reserved_field },
 				ecx: { description: "Extended function CPUID information", fields: this.#cpuid_reserved_field },
 				edx: { description: "Extended function CPUID information", fields: this.#cpuid_reserved_field },
+			}
+		},
+		{
+			id: 0x80000001,
+			registers: {
+				eax: { description: "Extended function CPUID information", fields: this.#cpuid_80000001_eax_fields },
+				ebx: { description: "Extended function CPUID information", fields: this.#cpuid_reserved_field },
+				ecx: { description: "Extended function CPUID information", fields: this.#cpuid_80000001_ecx_fields },
+				edx: { description: "Extended function CPUID information", fields: this.#cpuid_80000001_edx_fields },
 			}
 		},
 	];
