@@ -1040,7 +1040,7 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 	// cpuid.80000001.0.edx
 	#cpuid_80000001_edx_fields = [
 		new CpuidField("Reserved", [31,30], null, { reserved: true }),
-		new CpuidField("Intel 64 architecture available", 29, CpuidBaseResolvers.bool),
+		new CpuidField("Intel 64 architecture available (EM64T)", 29, CpuidBaseResolvers.bool),
 		new CpuidField("Reserved", 28, null, { reserved: true }),
 		new CpuidField("RDTSCP and IA32_TSC_AUX available", 27, CpuidBaseResolvers.bool),
 		new CpuidField("1GB pages available", 26, CpuidBaseResolvers.bool),
