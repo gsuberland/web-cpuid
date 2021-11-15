@@ -923,7 +923,8 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 	
 	// cpuid.14.0.ebx
 	#cpuid_14_ebx_fields = [
-		new CpuidField("Reserved", [31,6], null, { reserved: true }),
+		new CpuidField("Reserved", [31,7], null, { reserved: true }),
+		new CpuidField("PSB and PMI preservation MSRs are available", 6, CpuidBaseResolvers.bool),
 		new CpuidField("Power event trace supported", 5, CpuidBaseResolvers.bool),
 		new CpuidField("PTWRITE supported", 4, CpuidBaseResolvers.bool),
 		new CpuidField("MTC timing packet and suppression of COFI-based packets supported", 3, CpuidBaseResolvers.bool),
@@ -939,7 +940,7 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		new CpuidField("Output to Trace Transport subsystem supported", 3, CpuidBaseResolvers.bool),
 		new CpuidField("Single range output scheme supported", 2, CpuidBaseResolvers.bool),
 		new CpuidField("ToPA tables can hold any number of output entries", 1, CpuidBaseResolvers.bool),
-		new CpuidField("Tracing can be anbled with IA32_RTIT_CTL.ToPA=1", 0, CpuidBaseResolvers.bool),
+		new CpuidField("Tracing can be enabled with IA32_RTIT_CTL.ToPA=1 (ToPA output scheme)", 0, CpuidBaseResolvers.bool),
 	];
 	
 	// cpuid.14.0.edx is reserved
