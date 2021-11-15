@@ -89,8 +89,9 @@ web-cpuid is in active development and is not yet complete. currently only Intel
 
 current task list:
 
-- [ ] decode all intel cpuid fields in the basic 0x00000000 to 0x0fffffff range
-- [ ] decode all intel cpuid fields in the extended 0x80000000 to 0x8fffffff range
+- [x] decode all intel cpuid fields in the basic 0x00000000 to 0x0fffffff range
+- [x] decode all intel cpuid fields in the extended 0x80000000 to 0x8fffffff range
+- [ ] review [cpuid](https://linux.die.net/man/1/cpuid) tool source for any undocumented intel cpuid fields
 - [ ] add support for auto-detection of vendor
 - [ ] decode all AMD cpuid fileds in the basic 0x00000000 to 0x0fffffff range
 - [ ] decode all AMD cpuid fields in the extended 0x80000000 to 0x8fffffff range
