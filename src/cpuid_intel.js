@@ -350,6 +350,12 @@ class CpuidResolversIntel
 			return fg + "GHz";
 		}
 	}
+	
+	static cpuid17_vendor_id_scheme(v, ctx=null)
+	{
+		// 0 = intel, 1 = industry standard scheme
+		return ["Assigned by Intel", "Assigned by industry standard enumeration scheme"][v>>>0];
+	}
 }
 
 /*
@@ -894,6 +900,28 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 	
 	// cpuid.16.0.edx is reserved
 	
+	// cpuid.17.0.eax
+	#cpuid_17_eax_fields = [
+		new CpuidField("Number of sub-leaves supported in leaf 17h", [31,0]),
+	];
+	
+	// cpuid.17.0.ebx
+	#cpuid_17_ebx_fields = [
+		new CpuidField("Reserved", [31,17], null, {reserved: true }),
+		new CpuidField("SOC Vendor ID field assignment", 16, CpuidResolversIntel.cpuid17_vendor_id_scheme),
+		new CpuidField("SOC Vendor ID", [15,0], null, { printRawHex: true }),
+	];
+	
+	// cpuid.17.0.ecx
+	#cpuid_17_ecx_fields = [
+		new CpuidField("Project ID", [31,0], null, { printRawHex: true }),
+	];
+	
+	// cpuid.17.0.edx
+	#cpuid_17_edx_fields = [
+		new CpuidField("Stepping ID", [31,0], null, { printRawHex: true }),
+	];
+	
 	#leaves = [
 		{
 			id: 0,
@@ -1100,6 +1128,15 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 				ebx: { description: "Processor frequency information", fields: this.#cpuid_16_ebx_fields },
 				ecx: { description: "Processor frequency information", fields: this.#cpuid_16_ecx_fields },
 				edx: { description: "Processor frequency information", fields: this.#cpuid_reserved_field },
+			}
+		},
+		{
+			id: 0x17,
+			registers: {
+				eax: { description: "System-on-chip vendor attribute", fields: this.#cpuid_17_eax_fields },
+				ebx: { description: "System-on-chip vendor attribute", fields: this.#cpuid_17_ebx_fields },
+				ecx: { description: "System-on-chip vendor attribute", fields: this.#cpuid_17_ecx_fields },
+				edx: { description: "System-on-chip vendor attribute", fields: this.#cpuid_17_edx_fields },
 			}
 		},
 	];
