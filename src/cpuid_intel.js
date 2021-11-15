@@ -356,6 +356,30 @@ class CpuidResolversIntel
 		// 0 = intel, 1 = industry standard scheme
 		return ["Assigned by Intel", "Assigned by industry standard enumeration scheme"][v>>>0];
 	}
+	
+	static cpuid80000006_L2_associativity(v, ctx=null)
+	{
+		if ((v>>>0) > 0xF)
+			return "unknown";
+		return [
+			/* 00 */ "disabled",
+			/* 01 */ "direct mapped",
+			/* 02 */ "2-way",
+			/* 03 */ "reserved",
+			/* 04 */ "4-way",
+			/* 05 */ "reserved",
+			/* 06 */ "8-way",
+			/* 07 */ "reserved",
+			/* 08 */ "16-way",
+			/* 09 */ "reserved",
+			/* 0a */ "reserved",
+			/* 0b */ "reserved",
+			/* 0c */ "reserved",
+			/* 0d */ "reserved",
+			/* 0e */ "reserved",
+			/* 0f */ "fully associative",
+		][v>>>0];
+	}
 }
 
 /*
@@ -1025,6 +1049,19 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		new CpuidField("Processor brand string 11", [31,0], CpuidBaseResolvers.ascii),
 	];
 	
+	// cpuid.80000005 is reserved
+	
+	// cpuid.80000006.0.eax and cpuid.80000006.0.ebx are reserved
+	
+	// cpuid.80000006.0.ecx
+	#cpuid_80000006_ecx_fields = [
+		new CpuidField("Cache size in 1K units", [31,16]),
+		new CpuidField("L2 associativity", [15,12], CpuidResolversIntel.cpuid80000006_L2_associativity, { printRawHex: true }),
+		new CpuidField("Reserved", [11,8], null, { reserved: true }),
+		new CpuidField("Cache line size in bytes", [7,0]),
+	];
+	
+	// cpuid.80000006.0.edx is reserved
 	
 	#leaves = [
 		{
@@ -1286,6 +1323,24 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 				ebx: { description: "Processor brand string", fields: this.#cpuid_80000004_ebx_fields },
 				ecx: { description: "Processor brand string", fields: this.#cpuid_80000004_ecx_fields },
 				edx: { description: "Processor brand string", fields: this.#cpuid_80000004_edx_fields },
+			}
+		},
+		{
+			id: 0x80000005,
+			registers: {
+				eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+			}
+		},
+		{
+			id: 0x80000006,
+			registers: {
+				eax: { description: "Processor brand string", fields: this.#cpuid_reserved_field },
+				ebx: { description: "Processor brand string", fields: this.#cpuid_reserved_field },
+				ecx: { description: "Processor brand string", fields: this.#cpuid_80000006_ecx_fields },
+				edx: { description: "Processor brand string", fields: this.#cpuid_reserved_field },
 			}
 		},
 	];
