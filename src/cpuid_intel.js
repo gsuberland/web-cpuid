@@ -370,7 +370,7 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 	
 	// cpuid.0.0:eax
 	#cpuid_00_eax_fields = [
-		new CpuidField("Maximum value for basic CPUID", [31,0]),
+		new CpuidField("Maximum value for basic CPUID", [31,0], null, { printRawHex: true }),
 	];
 	
 	// cpuid.0.0:ebx
@@ -922,6 +922,15 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		new CpuidField("Stepping ID", [31,0], null, { printRawHex: true }),
 	];
 	
+	// end of documented leaf 0x00000000 to 0x0fffffff
+	
+	// cpuid.80000000.0.eax
+	#cpuid_80000000_eax_fields = [
+		new CpuidField("Maximum value for extended CPUID", [31,0], null, { printRawHex: true }),
+	];
+	
+	// cpuid.80000000.0.ebx, cpuid.80000000.0.ecx, cpuid.80000000.0.edx are reserved
+	
 	#leaves = [
 		{
 			id: 0,
@@ -1137,6 +1146,15 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 				ebx: { description: "System-on-chip vendor attribute", fields: this.#cpuid_17_ebx_fields },
 				ecx: { description: "System-on-chip vendor attribute", fields: this.#cpuid_17_ecx_fields },
 				edx: { description: "System-on-chip vendor attribute", fields: this.#cpuid_17_edx_fields },
+			}
+		},
+		{
+			id: 0x80000000,
+			registers: {
+				eax: { description: "Extended function CPUID information", fields: this.#cpuid_80000000_eax_fields },
+				ebx: { description: "Extended function CPUID information", fields: this.#cpuid_reserved_field },
+				ecx: { description: "Extended function CPUID information", fields: this.#cpuid_reserved_field },
+				edx: { description: "Extended function CPUID information", fields: this.#cpuid_reserved_field },
 			}
 		},
 	];
