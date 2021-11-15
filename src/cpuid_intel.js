@@ -1177,7 +1177,7 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 			registers: {
 				eax: { description: "Extended topology enumeration", fields: this.#cpuid_0a_eax_fields },
 				ebx: { description: "Extended topology enumeration", fields: this.#cpuid_0a_ebx_fields },
-				ecx: { description: "Extended topology enumeration", fields: this.#cpuid_reserved_field },
+				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
 				edx: { description: "Extended topology enumeration", fields: this.#cpuid_0a_edx_fields },
 			}
 		},
@@ -1240,7 +1240,7 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 			registers: {
 				eax: { description: "SGX capability enumeration", fields: this.#cpuid_12_eax_fields },
 				ebx: { description: "SGX capability enumeration", fields: this.#cpuid_12_ebx_fields },
-				ecx: { description: "SGX capability enumeration", fields: this.#cpuid_reserved_field },
+				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
 				edx: { description: "SGX capability enumeration", fields: this.#cpuid_12_edx_fields },
 			}
 		},
@@ -1259,7 +1259,7 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 				eax: { description: "Intel processor trace enumeration", fields: this.#cpuid_14_eax_fields },
 				ebx: { description: "Intel processor trace enumeration", fields: this.#cpuid_14_ebx_fields },
 				ecx: { description: "Intel processor trace enumeration", fields: this.#cpuid_14_ecx_fields },
-				edx: { description: "Intel processor trace enumeration", fields: this.#cpuid_reserved_field },
+				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
 			}
 		},
 		{
@@ -1268,7 +1268,7 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 				eax: { description: "Time stamp counter and nominal core crystal clock", fields: this.#cpuid_15_eax_fields },
 				ebx: { description: "Time stamp counter and nominal core crystal clock", fields: this.#cpuid_15_ebx_fields },
 				ecx: { description: "Time stamp counter and nominal core crystal clock", fields: this.#cpuid_15_ecx_fields },
-				edx: { description: "Time stamp counter and nominal core crystal clock", fields: this.#cpuid_reserved_field },
+				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
 			}
 		},
 		{
@@ -1277,7 +1277,7 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 				eax: { description: "Processor frequency information", fields: this.#cpuid_16_eax_fields },
 				ebx: { description: "Processor frequency information", fields: this.#cpuid_16_ebx_fields },
 				ecx: { description: "Processor frequency information", fields: this.#cpuid_16_ecx_fields },
-				edx: { description: "Processor frequency information", fields: this.#cpuid_reserved_field },
+				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
 			}
 		},
 		{
@@ -1293,16 +1293,16 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 			id: 0x80000000,
 			registers: {
 				eax: { description: "Extended function CPUID information", fields: this.#cpuid_80000000_eax_fields },
-				ebx: { description: "Extended function CPUID information", fields: this.#cpuid_reserved_field },
-				ecx: { description: "Extended function CPUID information", fields: this.#cpuid_reserved_field },
-				edx: { description: "Extended function CPUID information", fields: this.#cpuid_reserved_field },
+				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
 			}
 		},
 		{
 			id: 0x80000001,
 			registers: {
 				eax: { description: "Extended processor signature and feature bits", fields: this.#cpuid_80000001_eax_fields },
-				ebx: { description: "Extended processor signature and feature bits", fields: this.#cpuid_reserved_field },
+				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
 				ecx: { description: "Extended processor signature and feature bits", fields: this.#cpuid_80000001_ecx_fields },
 				edx: { description: "Extended processor signature and feature bits", fields: this.#cpuid_80000001_edx_fields },
 			}
@@ -1346,10 +1346,10 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		{
 			id: 0x80000006,
 			registers: {
-				eax: { description: "L2 cache information", fields: this.#cpuid_reserved_field },
-				ebx: { description: "L2 cache information", fields: this.#cpuid_reserved_field },
+				eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
+				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
 				ecx: { description: "L2 cache information", fields: this.#cpuid_80000006_ecx_fields },
-				edx: { description: "L2 cache information", fields: this.#cpuid_reserved_field },
+				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
 			}
 		},
 		{
