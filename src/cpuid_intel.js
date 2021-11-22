@@ -1155,318 +1155,507 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 	
 	// end of the 80000000-8fffffff range
 	
+	
 	#leaves = [
 		{
-			id: 0,
-			registers: {
-				eax: { description: "Maximum basic CPUID value", fields: this.#cpuid_00_eax_fields },
-				ebx: { description: "CPU type name", fields: this.#cpuid_00_ebx_fields },
-				ecx: { description: "CPU type name", fields: this.#cpuid_00_ecx_fields },
-				edx: { description: "CPU type name", fields: this.#cpuid_00_edx_fields },
-			}
+			leafID: 0,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Maximum basic CPUID value", fields: this.#cpuid_00_eax_fields },
+						ebx: { description: "CPU type name", fields: this.#cpuid_00_ebx_fields },
+						ecx: { description: "CPU type name", fields: this.#cpuid_00_ecx_fields },
+						edx: { description: "CPU type name", fields: this.#cpuid_00_edx_fields },
+					},
+				},
+			],
 		},
 		{
-			id: 1,
-			registers: {
-				eax: { description: "Version information", fields: this.#cpuid_01_eax_fields },
-				ebx: { description: "Basic information", fields: this.#cpuid_01_ebx_fields },
-				ecx: { description: "Feature information", fields: this.#cpuid_01_ecx_fields },
-				edx: { description: "Feature information", fields: this.#cpuid_01_edx_fields },
-			}
+			leafID: 1,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Version information", fields: this.#cpuid_01_eax_fields },
+						ebx: { description: "Basic information", fields: this.#cpuid_01_ebx_fields },
+						ecx: { description: "Feature information", fields: this.#cpuid_01_ecx_fields },
+						edx: { description: "Feature information", fields: this.#cpuid_01_edx_fields },
+					},
+				},
+			],
 		},
 		{
-			id: 2,
-			registers: {
-				eax: { description: "Cache, TLB, and prefetch descriptors", fields: this.#cpuid_02_eax_fields },
-				ebx: { description: "Cache, TLB, and prefetch descriptors", fields: this.#cpuid_02_ebx_fields },
-				ecx: { description: "Cache, TLB, and prefetch descriptors", fields: this.#cpuid_02_ecx_fields },
-				edx: { description: "Cache, TLB, and prefetch descriptors", fields: this.#cpuid_02_edx_fields },
-			}
+			leafID: 2,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Cache, TLB, and prefetch descriptors", fields: this.#cpuid_02_eax_fields },
+						ebx: { description: "Cache, TLB, and prefetch descriptors", fields: this.#cpuid_02_ebx_fields },
+						ecx: { description: "Cache, TLB, and prefetch descriptors", fields: this.#cpuid_02_ecx_fields },
+						edx: { description: "Cache, TLB, and prefetch descriptors", fields: this.#cpuid_02_edx_fields },
+					},
+				},
+			],
 		},
 		{
-			id: 3,
-			registers: {
-				eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ecx: { description: "Processor serial number", fields: this.#cpuid_03_ecx_fields },
-				edx: { description: "Processor serial number", fields: this.#cpuid_03_edx_fields },
-			}
+			leafID: 3,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ecx: { description: "Processor serial number", fields: this.#cpuid_03_ecx_fields },
+						edx: { description: "Processor serial number", fields: this.#cpuid_03_edx_fields },
+					},
+				},
+			],
 		},
 		{
-			id: 4,
-			registers: {
-				eax: { description: "Cache information", fields: this.#cpuid_04_eax_fields },
-				ebx: { description: "Cache sets", fields: this.#cpuid_04_ebx_fields },
-				ecx: { description: "Cache information", fields: this.#cpuid_04_ecx_fields },
-				edx: { description: "Cache information", fields: this.#cpuid_04_edx_fields },
-			}
+			leafID: 4,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Cache information", fields: this.#cpuid_04_eax_fields },
+						ebx: { description: "Cache sets", fields: this.#cpuid_04_ebx_fields },
+						ecx: { description: "Cache information", fields: this.#cpuid_04_ecx_fields },
+						edx: { description: "Cache information", fields: this.#cpuid_04_edx_fields },
+					},
+				},
+			],
 		},
 		{
-			id: 5,
-			registers: {
-				eax: { description: "MONITOR/MWAIT", fields: this.#cpuid_05_eax_fields },
-				ebx: { description: "MONITOR/MWAIT line size", fields: this.#cpuid_05_ebx_fields },
-				ecx: { description: "MONITOR/MWAIT line size", fields: this.#cpuid_05_ecx_fields },
-				edx: { description: "MWAIT C-states", fields: this.#cpuid_05_edx_fields },
-			}
+			leafID: 5,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "MONITOR/MWAIT", fields: this.#cpuid_05_eax_fields },
+						ebx: { description: "MONITOR/MWAIT line size", fields: this.#cpuid_05_ebx_fields },
+						ecx: { description: "MONITOR/MWAIT line size", fields: this.#cpuid_05_ecx_fields },
+						edx: { description: "MWAIT C-states", fields: this.#cpuid_05_edx_fields },
+					},
+				},
+			],
 		},
 		{
-			id: 6,
-			registers: {
-				eax: { description: "Thermal and power management", fields: this.#cpuid_06_eax_fields },
-				ebx: { description: "Digital temperature sensor interrupts", fields: this.#cpuid_06_ebx_fields },
-				ecx: { description: "Thermal and power management", fields: this.#cpuid_06_ecx_fields },
-				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-			}
+			leafID: 6,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Thermal and power management", fields: this.#cpuid_06_eax_fields },
+						ebx: { description: "Digital temperature sensor interrupts", fields: this.#cpuid_06_ebx_fields },
+						ecx: { description: "Thermal and power management", fields: this.#cpuid_06_ecx_fields },
+						edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+					},
+				},
+			],
 		},
 		{
-			id: 7,
-			registers: {
-				eax: { description: "Maximum sub-leaves for leaf 7", fields: this.#cpuid_07_eax_fields },
-				ebx: { description: "Structured extended feature flags", fields: this.#cpuid_07_ebx_fields },
-				ecx: { description: "Structured extended feature flags", fields: this.#cpuid_07_ecx_fields },
-				edx: { description: "Structured extended feature flags", fields: this.#cpuid_07_edx_fields },
-			}
+			leafID: 7,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Maximum sub-leaves for leaf 7", fields: this.#cpuid_07_eax_fields },
+						ebx: { description: "Structured extended feature flags", fields: this.#cpuid_07_ebx_fields },
+						ecx: { description: "Structured extended feature flags", fields: this.#cpuid_07_ecx_fields },
+						edx: { description: "Structured extended feature flags", fields: this.#cpuid_07_edx_fields },
+					},
+				},
+			],
 		},
 		{
-			id: 8,
-			registers: {
-				eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-			}
+			leafID: 8,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+					},
+				},
+			],
 		},
 		{
-			id: 9,
-			registers: {
-				eax: { description: "Direct cache access information", fields: this.#cpuid_09_eax_fields },
-				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-			}
+			leafID: 9,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Direct cache access information", fields: this.#cpuid_09_eax_fields },
+						ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+					},
+				},
+			],
 		},
 		{
-			id: 0xA,
-			registers: {
-				eax: { description: "Architectural performance monitoring", fields: this.#cpuid_0a_eax_fields },
-				ebx: { description: "Performance event availability", fields: this.#cpuid_0a_ebx_fields },
-				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				edx: { description: "Architectural performance monitoring", fields: this.#cpuid_0a_edx_fields },
-			}
+			leafID: 0xa,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Architectural performance monitoring", fields: this.#cpuid_0a_eax_fields },
+						ebx: { description: "Performance event availability", fields: this.#cpuid_0a_ebx_fields },
+						ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						edx: { description: "Architectural performance monitoring", fields: this.#cpuid_0a_edx_fields },
+					},
+				},
+			],
 		},
 		{
-			id: 0xB,
-			registers: {
-				eax: { description: "Extended topology enumeration", fields: this.#cpuid_0a_eax_fields },
-				ebx: { description: "Extended topology enumeration", fields: this.#cpuid_0a_ebx_fields },
-				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				edx: { description: "Extended topology enumeration", fields: this.#cpuid_0a_edx_fields },
-			}
+			leafID: 0xb,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Extended topology enumeration", fields: this.#cpuid_0a_eax_fields },
+						ebx: { description: "Extended topology enumeration", fields: this.#cpuid_0a_ebx_fields },
+						ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						edx: { description: "Extended topology enumeration", fields: this.#cpuid_0a_edx_fields },
+					},
+				},
+			],
 		},
 		{
-			id: 0xC,
-			registers: {
-				eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-			}
+			leafID: 0xc,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+					},
+				},
+			],
 		},
 		{
-			id: 0xD,
-			registers: {
-				eax: { description: "Extended state enumeration", fields: this.#cpuid_0d_eax_fields },
-				ebx: { description: "Extended state enumeration", fields: this.#cpuid_0d_ebx_fields },
-				ecx: { description: "Extended state enumeration", fields: this.#cpuid_0d_ecx_fields },
-				edx: { description: "Extended state enumeration", fields: this.#cpuid_0d_edx_fields },
-			}
+			leafID: 0xd,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Extended state enumeration", fields: this.#cpuid_0d_eax_fields },
+						ebx: { description: "Extended state enumeration", fields: this.#cpuid_0d_ebx_fields },
+						ecx: { description: "Extended state enumeration", fields: this.#cpuid_0d_ecx_fields },
+						edx: { description: "Extended state enumeration", fields: this.#cpuid_0d_edx_fields },
+					},
+				},
+			],
 		},
 		{
-			id: 0xE,
-			registers: {
-				eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-			}
+			leafID: 0xe,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+					},
+				},
+			],
 		},
 		{
-			id: 0xF,
-			registers: {
-				eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ebx: { description: "Extended state enumeration", fields: this.#cpuid_0f_ebx_fields },
-				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				edx: { description: "Extended state enumeration", fields: this.#cpuid_0f_edx_fields },
-			}
+			leafID: 0xf,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ebx: { description: "Extended state enumeration", fields: this.#cpuid_0f_ebx_fields },
+						ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						edx: { description: "Extended state enumeration", fields: this.#cpuid_0f_edx_fields },
+					},
+				},
+			],
 		},
 		{
-			id: 0x10,
-			registers: {
-				eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ebx: { description: "Intel Resource Director Technology (RDT)", fields: this.#cpuid_10_ebx_fields },
-				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-			}
+			leafID: 0x10,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ebx: { description: "Intel Resource Director Technology (RDT)", fields: this.#cpuid_10_ebx_fields },
+						ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+					},
+				},
+			],
 		},
 		{
-			id: 0x11,
-			registers: {
-				eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-			}
+			leafID: 0x11,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+					},
+				},
+			],
 		},
 		{
-			id: 0x12,
-			registers: {
-				eax: { description: "SGX capability enumeration", fields: this.#cpuid_12_eax_fields },
-				ebx: { description: "SGX capability enumeration", fields: this.#cpuid_12_ebx_fields },
-				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				edx: { description: "SGX capability enumeration", fields: this.#cpuid_12_edx_fields },
-			}
+			leafID: 0x12,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "SGX capability enumeration", fields: this.#cpuid_12_eax_fields },
+						ebx: { description: "SGX capability enumeration", fields: this.#cpuid_12_ebx_fields },
+						ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						edx: { description: "SGX capability enumeration", fields: this.#cpuid_12_edx_fields },
+					},
+				},
+			],
 		},
 		{
-			id: 0x13,
-			registers: {
-				eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-			}
+			leafID: 0x13,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+					},
+				},
+			],
 		},
 		{
-			id: 0x14,
-			registers: {
-				eax: { description: "Intel processor trace enumeration", fields: this.#cpuid_14_eax_fields },
-				ebx: { description: "Intel processor trace enumeration", fields: this.#cpuid_14_ebx_fields },
-				ecx: { description: "Intel processor trace enumeration", fields: this.#cpuid_14_ecx_fields },
-				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-			}
+			leafID: 0x14,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Intel processor trace enumeration", fields: this.#cpuid_14_eax_fields },
+						ebx: { description: "Intel processor trace enumeration", fields: this.#cpuid_14_ebx_fields },
+						ecx: { description: "Intel processor trace enumeration", fields: this.#cpuid_14_ecx_fields },
+						edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+					},
+				},
+			],
 		},
 		{
-			id: 0x15,
-			registers: {
-				eax: { description: "Time stamp counter and nominal core crystal clock", fields: this.#cpuid_15_eax_fields },
-				ebx: { description: "Time stamp counter and nominal core crystal clock", fields: this.#cpuid_15_ebx_fields },
-				ecx: { description: "Time stamp counter and nominal core crystal clock", fields: this.#cpuid_15_ecx_fields },
-				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-			}
+			leafID: 0x15,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Time stamp counter and nominal core crystal clock", fields: this.#cpuid_15_eax_fields },
+						ebx: { description: "Time stamp counter and nominal core crystal clock", fields: this.#cpuid_15_ebx_fields },
+						ecx: { description: "Time stamp counter and nominal core crystal clock", fields: this.#cpuid_15_ecx_fields },
+						edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+					},
+				},
+			],
 		},
 		{
-			id: 0x16,
-			registers: {
-				eax: { description: "Processor frequency information", fields: this.#cpuid_16_eax_fields },
-				ebx: { description: "Processor frequency information", fields: this.#cpuid_16_ebx_fields },
-				ecx: { description: "Processor frequency information", fields: this.#cpuid_16_ecx_fields },
-				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-			}
+			leafID: 0x16,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Processor frequency information", fields: this.#cpuid_16_eax_fields },
+						ebx: { description: "Processor frequency information", fields: this.#cpuid_16_ebx_fields },
+						ecx: { description: "Processor frequency information", fields: this.#cpuid_16_ecx_fields },
+						edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+					},
+				},
+			],
 		},
 		{
-			id: 0x17,
-			registers: {
-				eax: { description: "System-on-chip vendor attribute", fields: this.#cpuid_17_eax_fields },
-				ebx: { description: "System-on-chip vendor attribute", fields: this.#cpuid_17_ebx_fields },
-				ecx: { description: "System-on-chip vendor attribute", fields: this.#cpuid_17_ecx_fields },
-				edx: { description: "System-on-chip vendor attribute", fields: this.#cpuid_17_edx_fields },
-			}
+			leafID: 0x17,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "System-on-chip vendor attribute", fields: this.#cpuid_17_eax_fields },
+						ebx: { description: "System-on-chip vendor attribute", fields: this.#cpuid_17_ebx_fields },
+						ecx: { description: "System-on-chip vendor attribute", fields: this.#cpuid_17_ecx_fields },
+						edx: { description: "System-on-chip vendor attribute", fields: this.#cpuid_17_edx_fields },
+					},
+				},
+			],
 		},
 		{
-			id: 0x80000000,
-			registers: {
-				eax: { description: "Extended function CPUID information", fields: this.#cpuid_80000000_eax_fields },
-				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-			}
+			leafID: 0x80000000,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Extended function CPUID information", fields: this.#cpuid_80000000_eax_fields },
+						ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+					},
+				},
+			],
 		},
 		{
-			id: 0x80000001,
-			registers: {
-				eax: { description: "Extended processor signature and feature bits", fields: this.#cpuid_80000001_eax_fields },
-				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ecx: { description: "Extended processor signature and feature bits", fields: this.#cpuid_80000001_ecx_fields },
-				edx: { description: "Extended processor signature and feature bits", fields: this.#cpuid_80000001_edx_fields },
-			}
+			leafID: 0x80000001,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Extended processor signature and feature bits", fields: this.#cpuid_80000001_eax_fields },
+						ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ecx: { description: "Extended processor signature and feature bits", fields: this.#cpuid_80000001_ecx_fields },
+						edx: { description: "Extended processor signature and feature bits", fields: this.#cpuid_80000001_edx_fields },
+					},
+				},
+			],
 		},
 		{
-			id: 0x80000002,
-			registers: {
-				eax: { description: "Processor brand string", fields: this.#cpuid_80000002_eax_fields },
-				ebx: { description: "Processor brand string", fields: this.#cpuid_80000002_ebx_fields },
-				ecx: { description: "Processor brand string", fields: this.#cpuid_80000002_ecx_fields },
-				edx: { description: "Processor brand string", fields: this.#cpuid_80000002_edx_fields },
-			}
+			leafID: 0x80000002,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Processor brand string", fields: this.#cpuid_80000002_eax_fields },
+						ebx: { description: "Processor brand string", fields: this.#cpuid_80000002_ebx_fields },
+						ecx: { description: "Processor brand string", fields: this.#cpuid_80000002_ecx_fields },
+						edx: { description: "Processor brand string", fields: this.#cpuid_80000002_edx_fields },
+					},
+				},
+			],
 		},
 		{
-			id: 0x80000003,
-			registers: {
-				eax: { description: "Processor brand string", fields: this.#cpuid_80000003_eax_fields },
-				ebx: { description: "Processor brand string", fields: this.#cpuid_80000003_ebx_fields },
-				ecx: { description: "Processor brand string", fields: this.#cpuid_80000003_ecx_fields },
-				edx: { description: "Processor brand string", fields: this.#cpuid_80000003_edx_fields },
-			}
+			leafID: 0x80000003,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Processor brand string", fields: this.#cpuid_80000003_eax_fields },
+						ebx: { description: "Processor brand string", fields: this.#cpuid_80000003_ebx_fields },
+						ecx: { description: "Processor brand string", fields: this.#cpuid_80000003_ecx_fields },
+						edx: { description: "Processor brand string", fields: this.#cpuid_80000003_edx_fields },
+					},
+				},
+			],
 		},
 		{
-			id: 0x80000004,
-			registers: {
-				eax: { description: "Processor brand string", fields: this.#cpuid_80000004_eax_fields },
-				ebx: { description: "Processor brand string", fields: this.#cpuid_80000004_ebx_fields },
-				ecx: { description: "Processor brand string", fields: this.#cpuid_80000004_ecx_fields },
-				edx: { description: "Processor brand string", fields: this.#cpuid_80000004_edx_fields },
-			}
+			leafID: 0x80000004,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Processor brand string", fields: this.#cpuid_80000004_eax_fields },
+						ebx: { description: "Processor brand string", fields: this.#cpuid_80000004_ebx_fields },
+						ecx: { description: "Processor brand string", fields: this.#cpuid_80000004_ecx_fields },
+						edx: { description: "Processor brand string", fields: this.#cpuid_80000004_edx_fields },
+					},
+				},
+			],
 		},
 		{
-			id: 0x80000005,
-			registers: {
-				eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-			}
+			leafID: 0x80000005,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+					},
+				},
+			],
 		},
 		{
-			id: 0x80000006,
-			registers: {
-				eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ecx: { description: "L2 cache information", fields: this.#cpuid_80000006_ecx_fields },
-				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-			}
+			leafID: 0x80000006,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ecx: { description: "L2 cache information", fields: this.#cpuid_80000006_ecx_fields },
+						edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+					},
+				},
+			],
 		},
 		{
-			id: 0x80000007,
-			registers: {
-				eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				edx: { description: "Invariant TSC", fields: this.#cpuid_80000007_edx_fields },
-			}
+			leafID: 0x80000007,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						edx: { description: "Invariant TSC", fields: this.#cpuid_80000007_edx_fields },
+					},
+				},
+			],
 		},
 		{
-			id: 0x80000008,
-			registers: {
-				eax: { description: "Linear/physical address size", fields: this.#cpuid_80000008_eax_fields },
-				ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-				edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-			}
+			leafID: 0x80000008,
+			subleaves: [
+				{
+					subleafID: 0,
+					registers: {
+						eax: { description: "Linear/physical address size", fields: this.#cpuid_80000008_eax_fields },
+						ebx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+					},
+				},
+			],
 		},
 	];
 	
 	constructor()
 	{
 		super();
+		
+		// mark each subleaf with the parent leaf ID
+		for (const leaf of this.#leaves)
+		{
+			for (let subleaf of leaf.subleaves)
+			{
+				subleaf.leafID = leaf.leafID;
+			}
+		}
 	}
 	
-	getLeaf(leafID)
+	isMatch(cpuid0regs)
 	{
-		for (let leaf of this.#leaves)
+		const EBX = 1;
+		const ECX = 2;
+		const EDX = 3;
+		return (cpuid0regs[EBX] == 0x756E6547 /* 'Genu' */) && (cpuid0regs[EDX] == 0x49656E69 /* 'ineI' */) && (cpuid0regs[ECX] == 0x6C65746E /* 'ntel' */);
+	}
+	
+	getLeaf(leafID, subleafID = 0)
+	{
+		for (const leaf of this.#leaves)
 		{
-			if (leaf.id === leafID)
+			if (leaf.leafID === leafID)
 			{
-				return leaf;
+				for (let subleaf of leaf.subleaves)
+				{
+					if (subleaf.subleafID == subleafID)
+					{
+						return subleaf;
+					}
+				}
 			}
 		}
 		return null;

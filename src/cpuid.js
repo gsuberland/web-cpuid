@@ -82,6 +82,11 @@ class CpuidFieldsBase
 	{
 		throw new NotImplementedError("getLeaf must be overridden in a deriving class");
 	}
+	
+	isMatch(cpuid0regs)
+	{
+		throw new NotImplementedError("isMatch must be overridden in a deriving class");
+	}
 }
 
 /*

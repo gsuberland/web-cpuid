@@ -2,7 +2,15 @@ function cpuid_build(cpuid_values)
 {
 	let cpuid_container = document.getElementById("cpuid_container");
 	
-	var cpuid_leaves = new CpuidFieldsIntel();
+	var intelFields = new CpuidFieldsIntel();
+	var vendorFieldDefs = [ intelFields ];
+	var cpuid_leaves = null;
+	var cpuid_leaf0 = cpuid_values.find(lv => lv.leaf == 0);
+	for (const vendorFieldDef of vendorFieldDefs)
+	{
+		if (vendorFieldDef.isMatch(cpuid_leaf0.registers))
+			cpuid_leaves = vendorFieldDef;
+	}
 	
 	for (const leafValues of cpuid_values)
 	{
@@ -33,8 +41,8 @@ function cpuid_build(cpuid_values)
 			subleaf_reg_heading.innerText = "cpuid.";
 			
 			var subleaf_reg_number = document.createElement("span");
-			subleaf_reg_number.innerText = leaf.id.toString(16).padStart(2, '0');
-			subleaf_reg_number.title = leaf.id.toString(16).padStart(2, '0') + "h = " + leaf.id.toString(10);
+			subleaf_reg_number.innerText = leaf.leafID.toString(16).padStart(2, '0');
+			subleaf_reg_number.title = leaf.leafID.toString(16).padStart(2, '0') + "h = " + leaf.leafID.toString(10);
 			subleaf_reg_heading.appendChild(subleaf_reg_number);
 			
 			var subleaf_reg_separator = document.createElement("span");
@@ -66,7 +74,7 @@ function cpuid_build(cpuid_values)
 			
 			var subleaf_reg_contents = document.createElement("div");
 			subleaf_reg_contents.classList.add("diagram_container");
-			subleaf_reg_contents.id = "cpuid_" + leaf.id.toString(16) + "_0_" + reg;
+			subleaf_reg_contents.id = "cpuid_" + leaf.leafID.toString(16) + "_0_" + reg;
 			subleaf_reg_container.appendChild(subleaf_reg_contents);
 			
 			subleaf_container.appendChild(subleaf_reg_container);
@@ -92,7 +100,7 @@ function cpuid_build(cpuid_values)
 		let rn = 0;
 		for (const reg in leaf.registers)
 		{
-			const elementName = "cpuid_" + leaf.id.toString(16) + "_0_" + reg;
+			const elementName = "cpuid_" + leaf.leafID.toString(16) + "_0_" + reg;
 			let diagram = new CpuidDiagram(elementName, leaf.registers[reg].fields, leafValues.registers[rn], { registers: leafValues.registers });
 			rn++;
 			diagram.build();
