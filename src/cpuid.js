@@ -32,7 +32,8 @@ class CpuidBaseResolvers
 
 	static ascii(v, ctx=null)
 	{
-		return '"' + String.fromCharCode(v&0xFF) + String.fromCharCode((v>>8)&0xFF) + String.fromCharCode((v>>16)&0xFF) + String.fromCharCode((v>>24)&0xFF) + '"';
+		const quot = (ctx?.noQuote ?? false) ? '' : '"';
+		return quot + String.fromCharCode(v&0xFF) + String.fromCharCode((v>>8)&0xFF) + String.fromCharCode((v>>16)&0xFF) + String.fromCharCode((v>>24)&0xFF) + quot;
 	}
 
 	static bool(v, ctx=null)

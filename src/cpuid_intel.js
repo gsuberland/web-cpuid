@@ -382,6 +382,14 @@ class CpuidResolversIntel
 	}
 }
 
+class CpuidSummariesIntel
+{
+	static cpuid0(registers, ctx=null)
+	{
+		return 'Vendor = "' + CpuidBaseResolvers.ascii(registers[1], {noQuote:true}) + CpuidBaseResolvers.ascii(registers[3], {noQuote:true}) + CpuidBaseResolvers.ascii(registers[2], {noQuote:true}) + '"';
+	}
+}
+
 /*
 Field definitions for Intel CPUs
 */
@@ -1159,6 +1167,7 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 	#leaves = [
 		{
 			leafID: 0,
+			summaryHandler: CpuidSummariesIntel.cpuid0,
 			subleaves: [
 				{
 					subleafID: 0,
@@ -1215,6 +1224,7 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		},
 		{
 			leafID: 4,
+			repeatSubleaf: 0,
 			subleaves: [
 				{
 					subleafID: 0,
@@ -1649,6 +1659,17 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		{
 			if (leaf.leafID === leafID)
 			{
+				// if the definition says to repeat a specific subleaf, use that index for all subleaves
+				if ((leaf.repeatSubleaf ?? null) !== null)
+				{
+					// copy the definition and write the requested subleaf ID into it
+					let sl = {};
+					Object.assign(sl, leaf.subleaves[leaf.repeatSubleaf]);
+					sl.subleafID = subleafID;
+					return sl;
+				}
+				
+				// find the requested subleaf
 				for (let subleaf of leaf.subleaves)
 				{
 					if (subleaf.subleafID == subleafID)
@@ -1659,5 +1680,15 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 			}
 		}
 		return null;
+	}
+	
+	getLeafSummary(leafID, registers)
+	{
+		const leaf = this.#leaves.find(leaf => leaf.leafID == leafID) ?? null;
+		if (leaf === null)
+			return null;
+		if (!leaf.hasOwnProperty("summaryHandler"))
+			return null;
+		return leaf.summaryHandler(registers);
 	}
 }
