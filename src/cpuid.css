@@ -41,6 +41,27 @@ a { color: #48d594; }
 .bit_reserved { color: #778077; }
 .diagram_hover { filter: brightness(150%) saturate(120%) drop-shadow(0px 0px 3px rgba(255,255,255,0.3)); }
 
+.narrator_text {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    position: absolute !important;
+    height: 1px; 
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px 1px 1px 1px); /* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
+    clip: rect(1px, 1px, 1px, 1px); /*maybe deprecated but we need to support legacy browsers */
+    clip-path: inset(50%); /*modern browsers, clip-path works inwards from each corner*/
+    white-space: nowrap; /* added line to stop words getting smushed together (as they go onto seperate lines and some screen readers do not understand line feeds as a space */
+}
+
+.narrator_text_hidden {
+	display: inline-block;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
 button { background: #0b1416; color: #48d594; border: 1px solid #48d594; }
 .button_inactive { background: #0b1416 !important;  color: #48d594 !important; }
 .button_active { background: #48d594 !important; color: #0b1416 !important; }

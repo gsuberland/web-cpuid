@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="UTF-8" />
@@ -10,7 +11,7 @@
 		<h1>cpuid visualiser</h1>
 		<span>by <a href="https://twitter.com/gsuberland">@gsuberland</a> &mdash; source available on <a href="https://github.com/gsuberland/web-cpuid">github</a></span><br />
 		<div id="input_container">
-			<textarea id="input_textarea">
+			<textarea role="textarea" id="input_textarea">
 sample cpuid data
 
 note: do not use these values for reference; they are for demonstration only
@@ -115,7 +116,7 @@ leaf     sub   eax       ebx       ecx       edx
 			<button id="button_toggleRegisterValues" title="show the value of each register next to the name" class="button_active" data-active="true">regvals</button>
 			<button id="button_toggleDeuteranopiaMode" title="accessibility mode for red-green colourblind people">deuteranopia</button>
 		</div>
-		<div id="cpuid_container">
+		<div id="cpuid_container" role="main">
 		</div>
 	</div>
 </div>

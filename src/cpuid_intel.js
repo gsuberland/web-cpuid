@@ -774,6 +774,28 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		new CpuidField("Reserved", [1,0], null, { reserved: true }),
 	];
 	
+	// cpuid.7.1:eax
+	#cpuid_07_01_eax_fields = [
+		new CpuidField("Reserved", [31,23], null, { reserved: true }),
+		new CpuidField("Processor History Reset (HRESET) available", 22, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", [21,13], null, { reserved: true }),
+		new CpuidField("Supports fast short REP CMPSB, REP SCASB", 12, CpuidBaseResolvers.bool),
+		new CpuidField("Supports fast short REP STOSB", 11, CpuidBaseResolvers.bool),
+		new CpuidField("Supports fast zero-length REP MOSVB", 10, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", [9,6], null, { reserved: true }),
+		new CpuidField("BFLOAT16 VNNI instructions supported (AVX512-BF16)", 5, CpuidBaseResolvers.bool),
+		new CpuidField("VEX-encoded VNNI instructions supported (AVX-VNNI)", 4, CpuidBaseResolvers.bool),
+		new CpuidField("Reserved", [3,0], null, { reserved: true }),
+	];
+	
+	// cpuid.7.1:ebx
+	#cpuid_07_01_ebx_fields = [
+		new CpuidField("Reserved", [31,1], null, { reserved: true }),
+		new CpuidField("IA32_PPIN and IA32_PPIN_CTL MSRs present", 0, CpuidBaseResolvers.bool),
+	];
+	
+	// cpuid.7.1:ecx and cpuid.7.1:edx are reserved
+	
 	// cpuid.8.0 is reserved
 	
 	// cpuid.9.0:eax
@@ -1277,6 +1299,15 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 						edx: { description: "Structured extended feature flags", fields: this.#cpuid_07_edx_fields },
 					},
 				},
+				{
+					subleafID: 1,
+					registers: {
+						eax: { description: "Structured extended feature flags", fields: this.#cpuid_07_01_eax_fields },
+						ebx: { description: "Structured extended feature flags", fields: this.#cpuid_07_01_ebx_fields },
+						ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						edx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+					},
+				}
 			],
 		},
 		{

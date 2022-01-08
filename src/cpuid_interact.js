@@ -15,9 +15,22 @@ function cpuid_build(cpuid_values)
 	
 	for (const leafValues of cpuid_values)
 	{
-		var leaf_container = document.createElement("div");
+		// container section for this leaf
+		var leaf_container = document.createElement("section");
 		leaf_container.classList.add("leaf");
+		// id is the cpuid string so that anchor links jump right here
 		leaf_container.id = "cpuid." + leafValues.leaf.toString(16).padStart(2, '0');
+		
+		if (leafValues.leaf <= 0xF)
+		{
+			// this could also be represented by a single digit
+			// for convenience, add an extra anchor tag of the format cpuid.n
+			var leaf_anchor_extra = document.createElement("a");
+			leaf_anchor_extra.setAttribute("type", "anchor");
+			leaf_anchor_extra.setAttribute("role", "none");
+			leaf_anchor_extra.id = "cpuid." + leafValues.leaf.toString(16);
+			leaf_container.appendChild(leaf_anchor_extra);
+		}
 		
 		/*var sl0regs = leafValues.subleaves[0]?.registers ?? new Uint32Array([0,0,0,0]);
 		const leafSummaryText = cpuid_leaves.getLeafSummary(leafValues.leaf, sl0regs);
@@ -36,45 +49,64 @@ function cpuid_build(cpuid_values)
 			if (leaf === null)
 				continue;
 			
-			var subleaf_container = document.createElement("div");
+			// container section for this subleaf
+			var subleaf_container = document.createElement("section");
 			subleaf_container.classList.add("subleaf");
 			subleaf_container.id = "cpuid." + leaf.leafID.toString(16).padStart(2, '0') + "." + leaf.subleafID.toString(16);
 			
 			let rn = 0;
 			for (const reg in leaf.registers)
 			{
-				var subleaf_reg_container = document.createElement("div");
+				var subleaf_reg_container = document.createElement("section");
 				subleaf_reg_container.classList.add("subleaf_reg");
 				subleaf_reg_container.id = "cpuid." + leaf.leafID.toString(16).padStart(2, '0') + "." + leaf.subleafID.toString(16) + ":" + reg;
 				
 				var subleaf_reg_heading = document.createElement("h2");
-				subleaf_reg_heading.innerText = "cpuid.";
+				subleaf_reg_heading.setAttribute("aria-describedby", subleaf_reg_container.id + "_narrator");
+				
+				var subleaf_narrator_text = document.createElement("span");
+				subleaf_narrator_text.setAttribute("role", "text");
+				subleaf_narrator_text.id = subleaf_reg_container.id + "_narrator";
+				subleaf_narrator_text.classList.add("narrator_text");
+				subleaf_narrator_text.innerText = "CPUID leaf " + leaf.leafID.toString(16).padStart(2, '0') + ", subleaf " + leaf.subleafID.toString(16) + ", register " + reg;
+				subleaf_reg_heading.appendChild(subleaf_narrator_text);
+				
+				var subleaf_visible_text = document.createElement("span");
+				subleaf_visible_text.setAttribute("role", "none");
+				subleaf_visible_text.setAttribute("aria-hidden", "hidden");
+				
+				var subleaf_reg_prefix = document.createElement("span");
+				subleaf_reg_prefix.innerText = "cpuid.";
+				subleaf_visible_text.appendChild(subleaf_reg_prefix);
+				
 				
 				var subleaf_reg_number = document.createElement("span");
 				subleaf_reg_number.innerText = leaf.leafID.toString(16).padStart(2, '0');
 				subleaf_reg_number.title = leaf.leafID.toString(16).padStart(2, '0') + "h = " + leaf.leafID.toString(10);
-				subleaf_reg_heading.appendChild(subleaf_reg_number);
+				subleaf_visible_text.appendChild(subleaf_reg_number);
 				
 				var subleaf_reg_separator = document.createElement("span");
 				subleaf_reg_separator.innerText = '.';
-				subleaf_reg_heading.appendChild(subleaf_reg_separator);
+				subleaf_visible_text.appendChild(subleaf_reg_separator);
 				
 				var subleaf_reg_subleafnumber = document.createElement("span");
 				subleaf_reg_subleafnumber.innerText = leaf.subleafID.toString(16);
-				subleaf_reg_heading.appendChild(subleaf_reg_subleafnumber);
+				subleaf_visible_text.appendChild(subleaf_reg_subleafnumber);
 				
 				var subleaf_reg_colon = document.createElement("span");
 				subleaf_reg_colon.innerText = ':';
-				subleaf_reg_heading.appendChild(subleaf_reg_colon);
+				subleaf_visible_text.appendChild(subleaf_reg_colon);
 				
 				var subleaf_reg_regname = document.createElement("span");
 				subleaf_reg_regname.innerText = reg;
-				subleaf_reg_heading.appendChild(subleaf_reg_regname);
+				subleaf_visible_text.appendChild(subleaf_reg_regname);
 				
 				var subleaf_reg_value = document.createElement("span");
 				subleaf_reg_value.innerText = " = " + subleafValues.registers[rn].toString(16).toUpperCase().padStart(8, '0') + "h";
 				subleaf_reg_value.classList.add("register_value");
-				subleaf_reg_heading.appendChild(subleaf_reg_value);
+				subleaf_visible_text.appendChild(subleaf_reg_value);
+				
+				subleaf_reg_heading.appendChild(subleaf_visible_text);
 				subleaf_reg_container.appendChild(subleaf_reg_heading);
 				
 				var subleaf_reg_description = document.createElement("span");
@@ -110,6 +142,7 @@ function cpuid_build(cpuid_values)
 			{
 				const elementName = "cpuid_" + leaf.leafID.toString(16) + "_" + leaf.subleafID.toString(16) + "_" + reg;
 				let diagram = new CpuidDiagram(elementName, leaf.registers[reg].fields, subleafValues.registers[rn], { registers: subleafValues.registers });
+				diagram.showBitRange = getButtonState("button_toggleBitRanges");
 				rn++;
 				diagram.build();
 				document.getElementById(elementName).cpuid_diagram = diagram;
@@ -193,6 +226,13 @@ function toggleButton(elementName)
 		buttonElement.classList.remove("button_active");
 		buttonElement.classList.add("button_inactive");
 	}
+	return active;
+}
+
+function getButtonState(elementName)
+{
+	const buttonElement = document.getElementById(elementName);
+	var active = (buttonElement.getAttribute("data-active") ?? "false") === "true";
 	return active;
 }
 

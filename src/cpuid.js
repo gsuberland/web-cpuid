@@ -99,6 +99,7 @@ class CpuidDiagramCell
 	{
 		this.value = ' ';
 		this.style = 'd';
+		this.role = 'presentation';
 		this.owner = null;
 	}
 }
@@ -283,11 +284,12 @@ class CpuidDiagram
 	}
 	
 	// sets the value of a cell. the field index ties the cell to a specific field for highlighting
-	setCellValue(y, x, value, ownerFieldIndex, style='d')
+	setCellValue(y, x, value, ownerFieldIndex, style='d', role='presentation')
 	{
 		this.cells[y][x].owner = ownerFieldIndex;
 		this.cells[y][x].value = value;
 		this.cells[y][x].style = style;
+		this.cells[y][x].role = role;
 	}
 	
 	getMaxFieldNameLength()
@@ -301,10 +303,11 @@ class CpuidDiagram
 		return maxFieldNameLen;
 	}
 	
-	makeDiagramSpan(owner, extraStyles)
+	makeDiagramSpan(owner, extraStyles, role)
 	{
 		let span = document.createElement("span");
 		span.classList.add("diagram_span");
+		span.setAttribute("role", role);
 		if (owner !== null)
 		{
 			span.setAttribute("data-cpuid-owner", owner.toString());
@@ -543,7 +546,8 @@ class CpuidDiagram
 					yPos, offsetX + s,
 					field.name[s],
 					fieldIndex,
-					fieldStyleCode
+					fieldStyleCode,
+					'rowheader'
 				);
 			}
 			
@@ -572,7 +576,8 @@ class CpuidDiagram
 						yPos, offsetX + s,
 						displayValueStr[s],
 						fieldIndex,
-						fieldStyleCode
+						fieldStyleCode,
+						'cell'
 					);
 				}
 				
@@ -582,7 +587,8 @@ class CpuidDiagram
 					yPos, offsetX - 1,
 					"(",
 					fieldIndex,
-					fieldStyleCode
+					fieldStyleCode,
+					'cell'
 				);
 				this.setCellValue(
 					yPos, offsetX - 2,
@@ -601,7 +607,8 @@ class CpuidDiagram
 					yPos, offsetX + s,
 					rawValue[s],
 					fieldIndex,
-					fieldStyleCode
+					fieldStyleCode,
+					'cell'
 				);
 			}
 			
@@ -612,7 +619,8 @@ class CpuidDiagram
 					yPos, offsetX + rawValue.length,
 					")",
 					fieldIndex,
-					fieldStyleCode
+					fieldStyleCode,
+					'cell'
 				);
 			}
 		}
@@ -625,23 +633,26 @@ class CpuidDiagram
 			let currentStyle = this.cells[y][0].style;
 			// set the owner tag based on the left-most cell in this row
 			let currentOwner = this.cells[y][0].owner;
+			// set the ARIA role based on the left-most cell in this row
+			let currentRole = this.cells[y][0].role;
 			
 			// start a new span for the row, with the relevant styles
-			let currentSpan = this.makeDiagramSpan(currentOwner, [ this.styleCodeToClass(currentStyle), (y === BITS_ROW) ? "bitfield" : null ]);
+			let currentSpan = this.makeDiagramSpan(currentOwner, [ this.styleCodeToClass(currentStyle), (y === BITS_ROW) ? "bitfield" : null ], currentRole);
 			
 			let outputString = "";
 			for (let x = 0; x < this.width; x++)
 			{
-				if ((this.cells[y][x].style !== currentStyle) || (this.cells[y][x].owner !== currentOwner))
+				if ((this.cells[y][x].style !== currentStyle) || (this.cells[y][x].owner !== currentOwner) || (this.cells[y][x].role !== currentRole))
 				{
 					// we've changed style or owner, so we need a new span. write the current one out then make a new one.
 					currentSpan.innerText = outputString;
 					this.container.appendChild(currentSpan);
 					outputString = "";
 					
-					currentStyle = this.cells[y][x].style;
+					currentStyle = this.cells[y][x].style
 					currentOwner = this.cells[y][x].owner;
-					currentSpan = this.makeDiagramSpan(currentOwner, [ this.styleCodeToClass(currentStyle), (y === BITS_ROW) ? "bitfield" : null ]);
+					currentRole = this.cells[y][x].role;
+					currentSpan = this.makeDiagramSpan(currentOwner, [ this.styleCodeToClass(currentStyle), (y === BITS_ROW) ? "bitfield" : null ], currentRole);
 				}
 				outputString += this.cells[y][x].value;
 			}
