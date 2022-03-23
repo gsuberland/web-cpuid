@@ -1,5 +1,7 @@
 # web-cpuid
 
+![ ](https://img.shields.io/github/license/gsuberland/web-cpuid) ![ ](https://img.shields.io/github/last-commit/gsuberland/web-cpuid)
+
 web-cpuid is a lightweight web based decoder and visualiser for CPUID information.
 
 ![screenshot](screenshot.gif)
