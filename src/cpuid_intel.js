@@ -409,9 +409,39 @@ class CpuidResolversIntel
 
 class CpuidSummariesIntel
 {
-	static cpuid0(registers, ctx=null)
+	static cpuid0(leaf_values, all_values)
 	{
+		if (leaf_values.subleaves.length == 0)
+			return null;
+		const registers = leaf_values.subleaves[0].registers;
 		return 'Vendor = "' + CpuidBaseResolvers.ascii(registers[1], {noQuote:true}) + CpuidBaseResolvers.ascii(registers[3], {noQuote:true}) + CpuidBaseResolvers.ascii(registers[2], {noQuote:true}) + '"';
+	}
+	
+	static cpuid80000002(leaf_values, all_values)
+	{
+		if (leaf_values.subleaves.length == 0)
+			return null;
+		let brand = "";
+		let registers = [null, null, null];
+		for (let i = 0; i < all_values.length; i++)
+		{
+			if (all_values[i].leaf >= 0x80000002 && all_values[i].leaf <= 0x80000004)
+				registers[all_values[i].leaf - 0x80000002] = all_values[i].subleaves[0].registers;
+		}
+		if (registers[0] === null || registers[1] === null || registers[2] === null)
+			return null;
+		
+		for (let i = 0; i < registers.length; i++)
+		{
+			for (let r = 0; r < 4; r++)
+			{
+				if (registers[i][r] == 0)
+					return 'Processor Brand = "' + brand.trimEnd() + '"';
+				
+				brand += CpuidBaseResolvers.ascii(registers[i][r], {noQuote:true});
+			}
+		}
+		return 'Processor Brand = "' + brand.trimEnd() + '"';
 	}
 }
 
@@ -1745,6 +1775,8 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		},
 		{
 			leafID: 0x80000002,
+			summaryHandler: CpuidSummariesIntel.cpuid80000002,
+			summaryTitle: "cpuid.80000002-4",
 			subleaves: [
 				{
 					subleafID: 0,
@@ -1850,6 +1882,8 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		// mark each subleaf with the parent leaf ID
 		for (const leaf of this.#leaves)
 		{
+			if (!Object.hasOwn(leaf, 'subleaves'))
+				continue;
 			for (let subleaf of leaf.subleaves)
 			{
 				subleaf.leafID = leaf.leafID;
@@ -1871,6 +1905,11 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		{
 			if (leaf.leafID === leafID)
 			{
+				if (subleafID === null)
+				{
+					return leaf;
+				}
+				
 				// if the definition says to repeat a specific subleaf, use that index for all subleaves
 				if ((leaf.repeatSubleaf ?? null) !== null)
 				{
@@ -1894,13 +1933,10 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		return null;
 	}
 	
-	getLeafSummary(leafID, registers)
+	getLeafSummary(leaf, leaf_values, all_values)
 	{
-		const leaf = this.#leaves.find(leaf => leaf.leafID == leafID) ?? null;
-		if (leaf === null)
-			return null;
 		if (!leaf.hasOwnProperty("summaryHandler"))
 			return null;
-		return leaf.summaryHandler(registers);
+		return leaf.summaryHandler(leaf_values, all_values);
 	}
 }
