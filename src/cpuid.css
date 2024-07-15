@@ -4,6 +4,10 @@ the font file is not included in this repository since I do not have distributio
 */
 @font-face { font-family: 'GT America Mono Regular'; src: url(GT-America-Mono-Regular.woff2) format('woff2'); }
 
+::selection {
+    background: #202525;
+}
+
 * { font-family: "GT America Mono Regular", monospace; }
 body { background: #0b1416; color: #48d594; margin: 0px; overflow: auto; font-size: 16px; }
 h1 { font-size: 220%; margin-bottom: 0.1em; margin-top: 0; padding-top: 0; }
