@@ -49,7 +49,7 @@ function cpuid_build(cpuid_values)
 		if (leafSummaryText !== null)
 		{
 			var leaf_title = document.createElement("h2");
-			leaf_title.innerText = (leaf.summaryTitle ?? ("cpuid." + leaf.leafID.toString(16).padStart(2, '0'))) + " [summary]";
+			leaf_title.innerText = "[" + (leaf.summaryTitle ?? ("cpuid." + leaf.leafID.toString(16).padStart(2, '0'))) + " summary]";
 			leaf_container.appendChild(leaf_title);
 			var leaf_summary = document.createElement("span");
 			leaf_summary.classList.add("summary");

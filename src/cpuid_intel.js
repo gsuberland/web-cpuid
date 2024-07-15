@@ -1776,7 +1776,7 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		{
 			leafID: 0x80000002,
 			summaryHandler: CpuidSummariesIntel.cpuid80000002,
-			summaryTitle: "cpuid.80000002-4",
+			summaryTitle: "cpuid.80000002-80000004",
 			subleaves: [
 				{
 					subleafID: 0,
