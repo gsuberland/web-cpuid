@@ -5,7 +5,8 @@ the font file is not included in this repository since I do not have distributio
 @font-face { font-family: 'GT America Mono Regular'; src: url(GT-America-Mono-Regular.woff2) format('woff2'); }
 
 ::selection {
-    background: #202525;
+    background: #ffffff;
+    color: #000000;
 }
 
 * { font-family: "GT America Mono Regular", monospace; }
