@@ -94,10 +94,11 @@ current task list:
 - [x] decode all intel cpuid fields in the basic 0x00000000 to 0x0fffffff range
 - [x] decode all intel cpuid fields in the extended 0x80000000 to 0x8fffffff range
 - [x] review [cpuid](https://linux.die.net/man/1/cpuid) tool source for any undocumented intel cpuid fields
-- [ ] add support for auto-detection of vendor
+- [x] add support for auto-detection of vendor
 - [ ] decode all AMD cpuid fileds in the basic 0x00000000 to 0x0fffffff range
 - [ ] decode all AMD cpuid fields in the extended 0x80000000 to 0x8fffffff range
-- [ ] add sub-leaf support
+- [ ] update all Intel fields for 2024
+- [x] add sub-leaf support
 - [ ] add support for contextually decoding hypervisor leaves in the 0x40000000 to 0x4fffffff range
 
 ## development
