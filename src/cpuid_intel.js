@@ -318,13 +318,38 @@ class CpuidResolversIntel
 		][v>>>0];
 	}
 	
-	static cpuid0b_type_level(v, ctx=null)
+	static cpuid0b_domain_type(v, ctx=null)
 	{
 		return (v>>>0) > 2 ? "reserved" : [
 			"Invalid",
-			"SMT",
+			"Logical Processor",
 			"Core"
 		][v>>>0];
+	}
+	
+	static cpuid0d_xss_or_cxr0(v, ctx=null)
+	{
+		return ["XCR0", "IA32_XSS"][v & 1];
+	}
+	
+	static cpuid0d_mpx_state(v, ctx=null)
+	{
+		return [false, "Invalid", "Invalid", true][v & 0b11];
+	}
+	
+	static cpuid0d_mpx_state_validator(v, ctx=null)
+	{
+		return (v === 0) || (v === 3);
+	}
+	
+	static cpuid0d_avx512_state(v, ctx=null)
+	{
+		return [false, "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", true][v & 0b111];
+	}
+	
+	static cpuid0d_avx512_state_validator(v, ctx=null)
+	{
+		return (v === 0) || (v === 7);
 	}
 	
 	static cpuid12_enclave_size(v, ctx=null)
@@ -825,7 +850,41 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		new CpuidField("Core cycle event available", 0, CpuidBaseResolvers.boolInv),
 	];
 	
-	// cpuid.0a.0:ecx is reserved
+	// cpuid.0a.0:ecx
+	#cpuid_0a_ecx_fields = [
+		new CpuidField("Fixed counter 31 supported", 31, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 30 supported", 30, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 29 supported", 29, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 28 supported", 28, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 27 supported", 27, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 26 supported", 26, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 25 supported", 25, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 24 supported", 24, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 23 supported", 23, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 22 supported", 22, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 21 supported", 21, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 20 supported", 20, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 19 supported", 19, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 18 supported", 18, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 17 supported", 17, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 16 supported", 16, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 15 supported", 15, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 14 supported", 14, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 13 supported", 13, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 12 supported", 12, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 11 supported", 11, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 10 supported", 10, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 9 supported",  9, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 8 supported",  8, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 7 supported",  7, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 6 supported",  6, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 5 supported",  5, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 4 supported",  4, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 3 supported",  3, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 2 supported",  2, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 1 supported",  1, CpuidBaseResolvers.bool),
+		new CpuidField("Fixed counter 0 supported",  0, CpuidBaseResolvers.bool),
+	];
 	
 	// cpuid.0a.0.edx
 	#cpuid_0a_edx_fields = [
@@ -837,20 +896,20 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 	// cpuid.0b.0.eax
 	#cpuid_0b_eax_fields = [
 		new CpuidField("Reserved", [31,5], null, { reserved: true }),
-		new CpuidField("Number of bits to right-shift x2APIC ID by to get topology ID of next level type", [4,0], { printRawHex: true }),
+		new CpuidField("Number of bits to right-shift x2APIC ID by to address instances of the next higher-scoped domain", [4,0], { printRawHex: true }),
 	];
 	
 	// cpuid.0b.0.ebx
 	#cpuid_0b_ebx_fields = [
 		new CpuidField("Reserved", [31,16], null, { reserved: true }),
-		new CpuidField("Number of logical processors at this type level", [15,0], { printRawHex: true }),
+		new CpuidField("Number of logical processors of this domain type within the next higher-scoped domain", [15,0], { printRawHex: true }),
 	];
 	
 	// cpuid.0b.0.ecx
 	#cpuid_0b_ecx_fields = [
 		new CpuidField("Reserved", [31,16], null, { reserved: true }),
-		new CpuidField("Type level", [15,8], CpuidResolversIntel.cpuid0b_type_level),
-		new CpuidField("Level number", [7,0]),
+		new CpuidField("Domain type", [15,8], CpuidResolversIntel.cpuid0b_domain_type),
+		new CpuidField("Subleaf number", [7,0]),
 	];
 	
 	// cpuid.0b.0.edx
@@ -861,33 +920,64 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 	// cpuid.0c is is reserved
 	
 	// cpuid.0d.0.eax
-	#cpuid_0d_eax_fields = [
+	#cpuid_0d_0_eax_fields = [
 		new CpuidField("Reserved", [31,10], null, { reserved: true }),
 		new CpuidField("PKRU state", 9, CpuidBaseResolvers.bool),
 		new CpuidField("IA32_XSS state", 8, CpuidBaseResolvers.bool),
-		new CpuidField("AVX-512 state", [7,5], null, { printRawHex: true }),
-		new CpuidField("MPX state", [4,3], null, { printRawHex: true }),
+		new CpuidField("AVX-512 state", [7,5], CpuidResolversIntel.cpuid0d_avx512_state, { printRawHex: true, validityFunction: CpuidResolversIntel.cpuid0d_avx512_state_validator }),
+		new CpuidField("MPX state", [4,3], CpuidResolversIntel.cpuid0d_mpx_state, { printRawHex: true, validityFunction: CpuidResolversIntel.cpuid0d_mpx_state_validator }),
 		new CpuidField("AVX state", 2, CpuidBaseResolvers.bool),
 		new CpuidField("SSE state", 1, CpuidBaseResolvers.bool),
 		new CpuidField("x87 state", 0, CpuidBaseResolvers.bool),
 	];
 	
 	// cpuid.0d.0.ebx
-	#cpuid_0d_ebx_fields = [
+	#cpuid_0d_0_ebx_fields = [
 		new CpuidField("Maximum size required by enabled features in XCR0", [31,0], null, { printRawHex: true }),
 	];
 	
 	// cpuid.0d.0.ecx
-	#cpuid_0d_ecx_fields = [
+	#cpuid_0d_0_ecx_fields = [
 		new CpuidField("Maximum size required by all features supported by processor", [31,0], null, { printRawHex: true }),
 	];
 	
 	// cpuid.0d.0.edx
-	#cpuid_0d_edx_fields = [
+	#cpuid_0d_0_edx_fields = [
 		new CpuidField("Supported bits of the upper 32 bits of XCR0", [31,0], null, { printRawHex: true }),
 	];
 	
-	// todo: cpuid.0d.x subleaves
+	#cpuid_0d_1_eax_fields = [
+		new CpuidField("Extended features", [31, 0], null, { printRawHex: true}), // todo: actually parse these
+	];
+	
+	#cpuid_0d_1_ebx_fields = [
+		new CpuidField("Maximum state size as per current enabled features", [31, 0], null, { printRawHex: true}),
+	];
+	
+	#cpuid_0d_1_ecx_fields = [
+		new CpuidField("Valid bits in IA32_XSS[31:0]", [31, 0], null, { printRawHex: true}),
+	];
+	
+	#cpuid_0d_1_edx_fields = [
+		new CpuidField("Valid bits in IA32_XSS[63:32]", [31, 0], null, { printRawHex: true}),
+	];
+	
+	#cpuid_0d_N_eax_fields = [
+		new CpuidField("State size for this feature", [31, 0], null, { printRawHex: true}),
+	];
+	
+	#cpuid_0d_N_ebx_fields = [
+		new CpuidField("State byte offset for this feature", [31, 0], null, { printRawHex: true}),
+	];
+	
+	#cpuid_0d_N_ecx_fields = [
+		new CpuidField("Reserved", [31, 1], null, { reserved: true}),
+		new CpuidField("Feature source", 0, CpuidResolversIntel.cpuid0d_xss_or_cxr0),
+	];
+	
+	#cpuid_0d_N_edx_fields = [
+		new CpuidField("Reserved", [31, 0], null, { reserved: true}),
+	];
 	
 	// cpuid.0e is reserved
 	
@@ -1346,7 +1436,7 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 					registers: {
 						eax: { description: "Architectural performance monitoring", fields: this.#cpuid_0a_eax_fields },
 						ebx: { description: "Performance event availability", fields: this.#cpuid_0a_ebx_fields },
-						ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
+						ecx: { description: "Fixed counter enumeration", fields: this.#cpuid_0a_ecx_fields },
 						edx: { description: "Architectural performance monitoring", fields: this.#cpuid_0a_edx_fields },
 					},
 				},
@@ -1354,14 +1444,15 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 		},
 		{
 			leafID: 0xb,
+			repeatSubleaf: 0,
 			subleaves: [
 				{
 					subleafID: 0,
 					registers: {
-						eax: { description: "Extended topology enumeration", fields: this.#cpuid_0a_eax_fields },
-						ebx: { description: "Extended topology enumeration", fields: this.#cpuid_0a_ebx_fields },
-						ecx: { description: "Reserved", fields: this.#cpuid_reserved_field },
-						edx: { description: "Extended topology enumeration", fields: this.#cpuid_0a_edx_fields },
+						eax: { description: "Extended topology enumeration", fields: this.#cpuid_0b_eax_fields },
+						ebx: { description: "Extended topology enumeration", fields: this.#cpuid_0b_ebx_fields },
+						ecx: { description: "Extended topology enumeration", fields: this.#cpuid_0b_ecx_fields },
+						edx: { description: "Extended topology enumeration", fields: this.#cpuid_0b_edx_fields },
 					},
 				},
 			],
@@ -1386,10 +1477,100 @@ class CpuidFieldsIntel extends CpuidFieldsBase
 				{
 					subleafID: 0,
 					registers: {
-						eax: { description: "Extended state enumeration", fields: this.#cpuid_0d_eax_fields },
-						ebx: { description: "Extended state enumeration", fields: this.#cpuid_0d_ebx_fields },
-						ecx: { description: "Extended state enumeration", fields: this.#cpuid_0d_ecx_fields },
-						edx: { description: "Extended state enumeration", fields: this.#cpuid_0d_edx_fields },
+						eax: { description: "Extended state enumeration", fields: this.#cpuid_0d_0_eax_fields },
+						ebx: { description: "Extended state enumeration", fields: this.#cpuid_0d_0_ebx_fields },
+						ecx: { description: "Extended state enumeration", fields: this.#cpuid_0d_0_ecx_fields },
+						edx: { description: "Extended state enumeration", fields: this.#cpuid_0d_0_edx_fields },
+					},
+				},
+				{
+					subleafID: 1,
+					registers: {
+						eax: { description: "Extended state enumeration", fields: this.#cpuid_0d_1_eax_fields },
+						ebx: { description: "Extended state enumeration", fields: this.#cpuid_0d_1_ebx_fields },
+						ecx: { description: "Extended state enumeration", fields: this.#cpuid_0d_1_ecx_fields },
+						edx: { description: "Extended state enumeration", fields: this.#cpuid_0d_1_edx_fields },
+					},
+				},
+				{
+					subleafID: 2,
+					registers: {
+						eax: { description: "Extended state feature", fields: this.#cpuid_0d_N_eax_fields },
+						ebx: { description: "Extended state feature", fields: this.#cpuid_0d_N_ebx_fields },
+						ecx: { description: "Extended state feature", fields: this.#cpuid_0d_N_ecx_fields },
+						edx: { description: "Extended state feature", fields: this.#cpuid_0d_N_edx_fields },
+					},
+				},
+				{
+					subleafID: 3,
+					registers: {
+						eax: { description: "Extended state feature", fields: this.#cpuid_0d_N_eax_fields },
+						ebx: { description: "Extended state feature", fields: this.#cpuid_0d_N_ebx_fields },
+						ecx: { description: "Extended state feature", fields: this.#cpuid_0d_N_ecx_fields },
+						edx: { description: "Extended state feature", fields: this.#cpuid_0d_N_edx_fields },
+					},
+				},
+				{
+					subleafID: 4,
+					registers: {
+						eax: { description: "Extended state feature", fields: this.#cpuid_0d_N_eax_fields },
+						ebx: { description: "Extended state feature", fields: this.#cpuid_0d_N_ebx_fields },
+						ecx: { description: "Extended state feature", fields: this.#cpuid_0d_N_ecx_fields },
+						edx: { description: "Extended state feature", fields: this.#cpuid_0d_N_edx_fields },
+					},
+				},
+				{
+					subleafID: 5,
+					registers: {
+						eax: { description: "Extended state feature", fields: this.#cpuid_0d_N_eax_fields },
+						ebx: { description: "Extended state feature", fields: this.#cpuid_0d_N_ebx_fields },
+						ecx: { description: "Extended state feature", fields: this.#cpuid_0d_N_ecx_fields },
+						edx: { description: "Extended state feature", fields: this.#cpuid_0d_N_edx_fields },
+					},
+				},
+				{
+					subleafID: 6,
+					registers: {
+						eax: { description: "Extended state feature", fields: this.#cpuid_0d_N_eax_fields },
+						ebx: { description: "Extended state feature", fields: this.#cpuid_0d_N_ebx_fields },
+						ecx: { description: "Extended state feature", fields: this.#cpuid_0d_N_ecx_fields },
+						edx: { description: "Extended state feature", fields: this.#cpuid_0d_N_edx_fields },
+					},
+				},
+				{
+					subleafID: 7,
+					registers: {
+						eax: { description: "Extended state feature", fields: this.#cpuid_0d_N_eax_fields },
+						ebx: { description: "Extended state feature", fields: this.#cpuid_0d_N_ebx_fields },
+						ecx: { description: "Extended state feature", fields: this.#cpuid_0d_N_ecx_fields },
+						edx: { description: "Extended state feature", fields: this.#cpuid_0d_N_edx_fields },
+					},
+				},
+				{
+					subleafID: 8,
+					registers: {
+						eax: { description: "Extended state feature", fields: this.#cpuid_0d_N_eax_fields },
+						ebx: { description: "Extended state feature", fields: this.#cpuid_0d_N_ebx_fields },
+						ecx: { description: "Extended state feature", fields: this.#cpuid_0d_N_ecx_fields },
+						edx: { description: "Extended state feature", fields: this.#cpuid_0d_N_edx_fields },
+					},
+				},
+				{
+					subleafID: 9,
+					registers: {
+						eax: { description: "Extended state feature", fields: this.#cpuid_0d_N_eax_fields },
+						ebx: { description: "Extended state feature", fields: this.#cpuid_0d_N_ebx_fields },
+						ecx: { description: "Extended state feature", fields: this.#cpuid_0d_N_ecx_fields },
+						edx: { description: "Extended state feature", fields: this.#cpuid_0d_N_edx_fields },
+					},
+				},
+				{
+					subleafID: 10,
+					registers: {
+						eax: { description: "Extended state feature", fields: this.#cpuid_0d_N_eax_fields },
+						ebx: { description: "Extended state feature", fields: this.#cpuid_0d_N_ebx_fields },
+						ecx: { description: "Extended state feature", fields: this.#cpuid_0d_N_ecx_fields },
+						edx: { description: "Extended state feature", fields: this.#cpuid_0d_N_edx_fields },
 					},
 				},
 			],

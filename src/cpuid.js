@@ -109,11 +109,12 @@ Class for describing fields of CPUID registers
 */
 class CpuidField
 {
-	constructor(name, bits, resolve=null, options={printRawHex: false, reserved: false})
+	constructor(name, bits, resolve=null, options={printRawHex: false, reserved: false, validityFunction: null})
 	{
 		this.name = name;
 		this.bits = bits;
 		this.resolveFunction = resolve;
+		this.validityFunction = options.validityFunction ?? null;
 		this.printRawHex = options.printRawHex ?? false;
 		this.reserved = options.reserved ?? false;
 	}
@@ -153,6 +154,16 @@ class CpuidField
 		return this.reserved === true;
 	}
 	
+	isValid(registerValue, context=null)
+	{
+		if (this.validityFunction !== null && typeof this.validityFunction === 'function')
+		{
+			var rawValue = this.getRawValue(registerValue);
+			return this.validityFunction(rawValue, context);
+		}
+		return null;
+	}
+	
 	// returns the boolean value of this field if it is a boolean, otherwise null
 	getBooleanValue(registerValue, context=null)
 	{
@@ -169,6 +180,12 @@ class CpuidField
 		// 'r' for reserved fields
 		if (this.isReserved())
 			return 'r';
+		
+		// if the field has a validity function, call it so we can colour this red if it's invalid
+		if (this.isValid(registerValue, context) === false)
+		{
+			return 'f';
+		}
 		
 		// if the field resolves to a boolean, return 't' or 'f' for true/false respectively
 		let boolValue = this.getBooleanValue(registerValue, context);
@@ -284,10 +301,11 @@ class CpuidDiagram
 	}
 	
 	// sets the value of a cell. the field index ties the cell to a specific field for highlighting
-	setCellValue(y, x, value, ownerFieldIndex, style='d', role='presentation')
+	setCellValue(y, x, value, ownerFieldIndex, bits, style='d', role='presentation')
 	{
 		this.cells[y][x].owner = ownerFieldIndex;
 		this.cells[y][x].value = value;
+		this.cells[y][x].bits = bits;
 		this.cells[y][x].style = style;
 		this.cells[y][x].role = role;
 	}
@@ -303,7 +321,7 @@ class CpuidDiagram
 		return maxFieldNameLen;
 	}
 	
-	makeDiagramSpan(owner, extraStyles, role)
+	makeDiagramSpan(owner, bits, extraStyles, role)
 	{
 		let span = document.createElement("span");
 		span.classList.add("diagram_span");
@@ -311,6 +329,8 @@ class CpuidDiagram
 		if (owner !== null)
 		{
 			span.setAttribute("data-cpuid-owner", owner.toString());
+			const bitString = Array.isArray(bits) ? ("bits [" + bits[0].toString() + ":" + bits[1].toString() + "]") : ("bit " + bits.toString());
+			span.setAttribute("title", bitString);
 			span.onmouseover = handleSpanMouseHover;
 			span.onmouseleave = handleSpanMouseLeave;
 		}
@@ -360,6 +380,7 @@ class CpuidDiagram
 				BITS_ROW, this.getXPosForBit(i),
 				bitValue,
 				associatedFieldIndex,
+				associatedField.bits,
 				associatedField.getStyleCode(this.registerValue, this.context)
 			);
 		}
@@ -377,6 +398,7 @@ class CpuidDiagram
 						BITS_ROW, x,
 						' ',
 						fieldIndex,
+						field.bits,
 						field.getStyleCode(this.registerValue, this.context)
 					);
 				}
@@ -395,6 +417,7 @@ class CpuidDiagram
 					COMBINING_ROW, this.getXPosForBit(field.bits),
 					VBAR,
 					fieldIndex,
+					field.bits,
 					styleCode
 				);
 			}
@@ -410,6 +433,7 @@ class CpuidDiagram
 					COMBINING_ROW, highBitXPos,
 					LEFT_EDGE,
 					fieldIndex,
+					field.bits,
 					styleCode
 				);
 				// write the right edge
@@ -417,6 +441,7 @@ class CpuidDiagram
 					COMBINING_ROW, lowBitXPos,
 					RIGHT_EDGE,
 					fieldIndex,
+					field.bits,
 					styleCode
 				);
 				// join them together with a line
@@ -426,6 +451,7 @@ class CpuidDiagram
 						COMBINING_ROW, x,
 						HBAR,
 						fieldIndex,
+						field.bits,
 						styleCode
 					);
 				}
@@ -436,6 +462,7 @@ class CpuidDiagram
 					COMBINING_ROW, fieldMidPos,
 					TEE,
 					fieldIndex,
+					field.bits,
 					styleCode
 				);
 			}
@@ -465,6 +492,7 @@ class CpuidDiagram
 						y, linePos,
 						LEFT_EDGE,
 						fieldIndex,
+						field.bits,
 						field.getStyleCode(this.registerValue, this.context)
 					);
 					for (let x = linePos + 1; x < FIELDNAME_POS - FIELDNAME_GAP; x++)
@@ -473,6 +501,7 @@ class CpuidDiagram
 							y, x,
 							HBAR,
 							fieldIndex,
+							field.bits,
 							field.getStyleCode(this.registerValue, this.context)
 						);
 					}
@@ -483,6 +512,7 @@ class CpuidDiagram
 						y, linePos,
 						VBAR,
 						fieldIndex,
+						field.bits,
 						field.getStyleCode(this.registerValue, this.context)
 					);
 				}
@@ -519,6 +549,7 @@ class CpuidDiagram
 						yPos, offsetX + s,
 						bitRangeStr[s],
 						fieldIndex,
+						field.bits,
 						fieldStyleCode
 					);
 				}
@@ -533,6 +564,7 @@ class CpuidDiagram
 					yPos, offsetX + s,
 					' ',
 					fieldIndex,
+					field.bits,
 					fieldStyleCode
 				);
 			}
@@ -546,6 +578,7 @@ class CpuidDiagram
 					yPos, offsetX + s,
 					field.name[s],
 					fieldIndex,
+					field.bits,
 					fieldStyleCode,
 					'rowheader'
 				);
@@ -558,6 +591,7 @@ class CpuidDiagram
 					yPos, s,
 					' ',
 					fieldIndex,
+					field.bits,
 					fieldStyleCode
 				);
 			}
@@ -576,6 +610,7 @@ class CpuidDiagram
 						yPos, offsetX + s,
 						displayValueStr[s],
 						fieldIndex,
+						field.bits,
 						fieldStyleCode,
 						'cell'
 					);
@@ -587,6 +622,7 @@ class CpuidDiagram
 					yPos, offsetX - 1,
 					"(",
 					fieldIndex,
+					field.bits,
 					fieldStyleCode,
 					'cell'
 				);
@@ -594,6 +630,7 @@ class CpuidDiagram
 					yPos, offsetX - 2,
 					" ",
 					fieldIndex,
+					field.bits,
 					fieldStyleCode
 				);
 				needToCloseBracket = true;
@@ -607,6 +644,7 @@ class CpuidDiagram
 					yPos, offsetX + s,
 					rawValue[s],
 					fieldIndex,
+					field.bits,
 					fieldStyleCode,
 					'cell'
 				);
@@ -619,6 +657,7 @@ class CpuidDiagram
 					yPos, offsetX + rawValue.length,
 					")",
 					fieldIndex,
+					field.bits,
 					fieldStyleCode,
 					'cell'
 				);
@@ -637,7 +676,7 @@ class CpuidDiagram
 			let currentRole = this.cells[y][0].role;
 			
 			// start a new span for the row, with the relevant styles
-			let currentSpan = this.makeDiagramSpan(currentOwner, [ this.styleCodeToClass(currentStyle), (y === BITS_ROW) ? "bitfield" : null ], currentRole);
+			let currentSpan = this.makeDiagramSpan(currentOwner, this.cells[y][0].bits, [ this.styleCodeToClass(currentStyle), (y === BITS_ROW) ? "bitfield" : null ], currentRole);
 			
 			let outputString = "";
 			for (let x = 0; x < this.width; x++)
@@ -652,7 +691,7 @@ class CpuidDiagram
 					currentStyle = this.cells[y][x].style
 					currentOwner = this.cells[y][x].owner;
 					currentRole = this.cells[y][x].role;
-					currentSpan = this.makeDiagramSpan(currentOwner, [ this.styleCodeToClass(currentStyle), (y === BITS_ROW) ? "bitfield" : null ], currentRole);
+					currentSpan = this.makeDiagramSpan(currentOwner, this.cells[y][x].bits, [ this.styleCodeToClass(currentStyle), (y === BITS_ROW) ? "bitfield" : null ], currentRole);
 				}
 				outputString += this.cells[y][x].value;
 			}
