@@ -8,6 +8,12 @@ web-cpuid is a lightweight web based decoder and visualiser for CPUID informatio
 
 you can find a hosted version of it [here](https://cpuid.apps.poly.nomial.co.uk/).
 
+## notice
+
+this project has not been updated in a while as I haven't had time.
+
+while Intel support is mostly complete up to features from 2021, the AMD support is very limited.
+
 ## features
 
 current features include:
@@ -95,9 +101,9 @@ current task list:
 - [x] decode all intel cpuid fields in the extended 0x80000000 to 0x8fffffff range
 - [x] review [cpuid](https://linux.die.net/man/1/cpuid) tool source for any undocumented intel cpuid fields
 - [x] add support for auto-detection of vendor
-- [ ] decode all AMD cpuid fileds in the basic 0x00000000 to 0x0fffffff range
+- [ ] decode all AMD cpuid fields in the basic 0x00000000 to 0x0fffffff range
 - [ ] decode all AMD cpuid fields in the extended 0x80000000 to 0x8fffffff range
-- [ ] update all Intel fields for 2024
+- [ ] update all Intel fields for 2025
 - [x] add sub-leaf support
 - [ ] add support for contextually decoding hypervisor leaves in the 0x40000000 to 0x4fffffff range
 
