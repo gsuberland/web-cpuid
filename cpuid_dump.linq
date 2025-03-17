@@ -6,7 +6,7 @@
 
 // linqpad script to dump cpuid values.
 // windows-only, sorry. uses NtApiDotNet to allocate memory for the assembly.
-// works on both x86 and x64 with LinqPad 5 and LinqPad 6.
+// works on both x86 and x64 with LinqPad 5-8.
 
 private byte[] x86CodeBytes =
 {
@@ -66,10 +66,28 @@ public delegate void CpuIDDelegate(uint level, uint subleaf, UInt32[] buffer);
 
 void Main()
 {
-	Console.WriteLine("cpuid_dump.linq - v1.0.1 - written by @gsuberland");
-	Console.WriteLine();
-	using (var proc = NtApiDotNet.NtProcess.OpenCurrent())
+	Console.WriteLine("cpuid_dump.linq - v1.0.3 - written by @gsuberland");
+	// only allow this process to run on one thread
+	using (var proc = Process.GetCurrentProcess())
 	{
+		proc.ProcessorAffinity = 1;
+	}
+	// start a new thread since we can't know that existing managed threads haven't already been spawned with their own affinity masks
+	var thread = new Thread(WorkerThread);
+	thread.Start();
+	// wait for the thread to complete
+	thread.Join();
+}
+
+void WorkerThread()
+{
+	using (var proc = NtApiDotNet.NtProcess.OpenCurrent())
+	using (var thread = NtApiDotNet.NtThread.OpenCurrent())
+	{
+		// ensure that this code only runs on core 0 (note: this assumes it will not be migrated across processor groups, but this is unlikely)
+		thread.AffinityMask = 1;
+		
+		// alloc memory for code
 		long addr = NtVirtualMemory.AllocateMemory(proc.Handle, 0, 4096, MemoryAllocationType.Reserve | MemoryAllocationType.Commit, MemoryAllocationProtect.ExecuteReadWrite);
 		if (addr == 0)
 		{
@@ -77,17 +95,38 @@ void Main()
 			return;
 		}
 
+		Console.WriteLine("running in " + (proc.Is64Bit ? "64-bit" : "32-bit") + " process");
+		Console.WriteLine();
+
 		Marshal.Copy(proc.Is64Bit ? x64CodeBytes : x86CodeBytes, 0, new IntPtr(addr), proc.Is64Bit ? x64CodeBytes.Length : x86CodeBytes.Length);
 
+		// set up an unmanaged delegate to call the code we allocated
 		var cpuid = Marshal.GetDelegateForFunctionPointer<CpuIDDelegate>(new IntPtr(addr));
+		
+		// set up a pinned buffer for the results
 		var cpuid_buffer = new UInt32[4];
 		var pinnedHandle = GCHandle.Alloc(cpuid_buffer, GCHandleType.Pinned);
 
 		Console.WriteLine("cpuid".PadRight(14, ' ') + "eax".PadRight(10, ' ') + "ebx".PadRight(10, ' ') + "ecx".PadRight(10, ' ') + "edx".PadRight(10, ' '));
 
-		for (ulong leafBase = 0; leafBase <= 0xF0000000ul; leafBase += 0x1000000ul)
+		// iterate through all the "blocks" of cpuid leaves
+		for (ulong leafBase = 0; leafBase <= 0xF0000000ul; leafBase += 0x10000000ul)
 		{
-			for (uint leaf = 0; leaf <= 0xFFu; leaf++)
+			// figure out how many leaves there are in this block
+			cpuid_buffer[0] = 0;
+			cpuid_buffer[1] = 0;
+			cpuid_buffer[2] = 0;
+			cpuid_buffer[3] = 0;
+			cpuid((uint)(leafBase), 0, cpuid_buffer);
+			uint maxLeaf = cpuid_buffer[0] == 0 ? 0 : (cpuid_buffer[0] - (uint)leafBase);
+			// more leaves than this would be ridiculous
+			if (maxLeaf > 1024)
+				maxLeaf = 1024;
+
+			if (maxLeaf == 0)
+				continue;
+
+			for (uint leaf = 0; leaf <= maxLeaf; leaf++)
 			{
 				cpuid_buffer[0] = 0;
 				cpuid_buffer[1] = 0;
@@ -95,20 +134,6 @@ void Main()
 				cpuid_buffer[3] = 0;
 				cpuid((uint)(leafBase + leaf), 0, cpuid_buffer);
 
-				if (cpuid_buffer[0] == 0x76c &&
-					cpuid_buffer[1] == 0xe10 &&
-					cpuid_buffer[2] == 0x64 &&
-					cpuid_buffer[3] == 0)
-				{
-					continue;
-				}
-				if (cpuid_buffer[0] == 0 &&
-					cpuid_buffer[1] == 0 &&
-					cpuid_buffer[2] == 0 &&
-					cpuid_buffer[3] == 0)
-				{
-					continue;
-				}
 				Console.WriteLine(
 					$"{leafBase + leaf:x8}.00".PadRight(14, ' ') +
 					$"{cpuid_buffer[0]:x8}".PadRight(10, ' ') +
@@ -116,6 +141,7 @@ void Main()
 					$"{cpuid_buffer[2]:x8}".PadRight(10, ' ') +
 					$"{cpuid_buffer[3]:x8}".PadRight(10, ' ')
 				);
+
 				for (uint subleaf = 1; subleaf <= 0xF; subleaf++)
 				{
 					cpuid_buffer[0] = 0;
@@ -137,7 +163,7 @@ void Main()
 		}
 
 		pinnedHandle.Free();
-		
+
 		NtVirtualMemory.FreeMemory(proc.Handle, addr, 4096, MemoryFreeType.Release);
 	}
 }
